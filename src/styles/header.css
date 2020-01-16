@@ -1,0 +1,22 @@
+.header {
+  height: 60px;
+  line-height: 60px;
+  background-color: #fff;
+  border-bottom: 1px groove rgba(106, 137, 152, 0.2);
+}
+
+.container {
+  margin: 0 20%;
+}
+
+.link {
+  display: inline-block;
+  width: 25%;
+  text-align: center;
+}
+
+.link a {
+  text-decoration: none;
+  font-size: 14px;
+  color: #534745;
+}

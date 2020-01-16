@@ -1,0 +1,33 @@
+.profile-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 70px 16px 104px;
+}
+
+.profile-wrapper h1 {
+  font-size: 35px;
+  color: #0bc8b6;
+  letter-spacing: 3px;
+}
+
+.profile-container {
+  padding-top: 60px;
+  display: -webkit-box; /*Android4.3*/
+  display: -moz-box; /*Firefox21*/
+  display: -ms-flexbox; /*IE10*/
+  display: -webkit-flex; /*PC-Safari,iOS8.4*/
+  display: flex;
+}
+
+.profile-description {
+  width: 50%;
+  padding-left: 30px;
+  line-height: 2;
+}
+
+.profile-image {
+  width: 50%;
+  height: 530px;
+  background-image: url(../images/profile-image.jpg);
+  background-size: cover;
+}
