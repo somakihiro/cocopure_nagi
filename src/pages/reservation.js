@@ -6,7 +6,6 @@ import moment from "moment"
 import { makeStyles } from "@material-ui/core/styles"
 import Layout from "../components/layout"
 import { db } from "../../firebase-config"
-import { Menu } from "@material-ui/core"
 
 export default class Reservation extends React.Component {
   constructor(props) {
@@ -23,7 +22,6 @@ export default class Reservation extends React.Component {
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          console.log("start")
           const document = doc.data()
           if (document && document.reserved_flag) return
           reservable_date_time.push(
@@ -40,7 +38,6 @@ export default class Reservation extends React.Component {
 
   render() {
     const { reservable_date_time, selected_date } = this.state
-    console.log("reservable", reservable_date_time)
     // const styles = useStyles()
     return (
       <Layout>
@@ -69,39 +66,5 @@ export default class Reservation extends React.Component {
     )
   }
 }
-
-// export default () => {
-//   const reservable_date_time = []
-//   db.collection("reservations")
-//     .get()
-//     .then(querySnapshot => {
-//       querySnapshot.forEach(doc => {
-//         console.log("start")
-//         const document = doc.data()
-//         if (document && document.reserved_flag) return
-//         reservable_date_time.push(
-//           moment(document.date.toDate()).format("M/D HH:mm")
-//         )
-//       })
-//     })
-//   console.log("reservable_date_time", reservable_date_time)
-//   const styles = useStyles()
-//   return (
-//     <Layout>
-//       <div>
-//         <p>
-//           希望の来店日時（予約可能日時が表示されますので、選択してください）
-//         </p>
-//         <FormControl>
-//           <Select>
-//             {reservable_date_time.map(date => {
-//               return <MenuItem>{date}</MenuItem>
-//             })}
-//           </Select>
-//         </FormControl>
-//       </div>
-//     </Layout>
-//   )
-// }
 
 const useStyles = makeStyles({})
