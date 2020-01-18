@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from "gatsby"
 import Card from "@material-ui/core/Card"
 import CardActions from "@material-ui/core/CardActions"
 import CardContent from "@material-ui/core/CardContent"
@@ -16,7 +17,13 @@ export default props => {
         <p className={styles.description}>{props.description}</p>
       </CardContent>
       <CardActions className={styles.cardAction}>
-        <Button className={styles.button}>空席確認・予約する</Button>
+        <Link
+          to="/reservation"
+          className={styles.link}
+          state={{ selectedMenuIdForMenus: props.menuId }}
+        >
+          <Button className={styles.button}>空席確認・予約する</Button>
+        </Link>
       </CardActions>
     </Card>
   )
@@ -59,5 +66,8 @@ const useStyles = makeStyles({
       background: "#42c7c1",
       opacity: 0.7,
     },
+  },
+  link: {
+    textDecoration: "none",
   },
 })
