@@ -299,6 +299,7 @@ class Reservation extends React.Component {
       selectedDateId,
       selectedMenuId,
       selectedPackId,
+      email,
       menuErrorText,
       dateErrorText,
       nameErrorText,
