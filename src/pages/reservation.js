@@ -13,6 +13,7 @@ import RadioGroup from "@material-ui/core/RadioGroup"
 import moment from "moment"
 import { withStyles } from "@material-ui/core/styles"
 import Layout from "../components/layout"
+import CompletedReservation from "../components/completed_reservation"
 import { db } from "../../firebase-config"
 
 class Reservation extends React.Component {
@@ -29,6 +30,7 @@ class Reservation extends React.Component {
       dateErrorText: "",
       nameErrorText: "",
       emailErrorText: "",
+      isReserved: false,
     }
     this.menus = [
       {
@@ -232,7 +234,10 @@ class Reservation extends React.Component {
         reserved_flag: true,
         option_menus,
       })
-      .catch(function(error) {
+      .then(() => {
+        this.setState({ isReserved: true })
+      })
+      .catch(error => {
         console.error("Error updating document: ", error)
       })
   }
@@ -298,6 +303,7 @@ class Reservation extends React.Component {
       dateErrorText,
       nameErrorText,
       emailErrorText,
+      isReserved,
     } = this.state
 
     const { classes } = this.props
@@ -308,113 +314,122 @@ class Reservation extends React.Component {
 
     return (
       <Layout>
-        <div className={classes.wrapper}>
-          <p>メニュー</p>
-          <FormControl error={menuErrorText !== ""}>
-            <Select
-              value={selectedMenuId || selectedMenuIdForMenus}
-              onChange={this.setSelectedMenuId.bind(this)}
-              onBlur={this.onBlurValidateMenu.bind(this)}
-            >
-              {this.menus.map(menu => {
-                return (
-                  <MenuItem key={menu.id} value={menu.id}>
-                    {menu.title} {menu.treatmentTime}m ¥{menu.price}
-                  </MenuItem>
-                )
-              })}
-            </Select>
-            {menuErrorText && <FormHelperText>{menuErrorText}</FormHelperText>}
-          </FormControl>
-          <p>
-            希望の来店日時（予約可能日時が表示されますので、選択してください）
-          </p>
-          {reservableDateTimes.length > 0 ? (
-            <FormControl error={dateErrorText !== ""}>
+        {isReserved ? (
+          <CompletedReservation email={email} />
+        ) : (
+          <div className={classes.wrapper}>
+            <p>メニュー</p>
+            <FormControl error={menuErrorText !== ""}>
               <Select
-                value={selectedDateId}
-                onChange={this.setSelectedDateId.bind(this)}
-                onBlur={this.onBlurValidateDate.bind(this)}
+                value={selectedMenuId || selectedMenuIdForMenus}
+                onChange={this.setSelectedMenuId.bind(this)}
+                onBlur={this.onBlurValidateMenu.bind(this)}
               >
-                {reservableDateTimes &&
-                  reservableDateTimes.map(date => {
-                    return (
-                      <MenuItem value={date.id} key={date.id}>
-                        {date.dateTime}
-                      </MenuItem>
-                    )
-                  })}
+                {this.menus.map(menu => {
+                  return (
+                    <MenuItem key={menu.id} value={menu.id}>
+                      {menu.title} {menu.treatmentTime}m ¥{menu.price}
+                    </MenuItem>
+                  )
+                })}
               </Select>
-              {dateErrorText && (
-                <FormHelperText>{dateErrorText}</FormHelperText>
+              {menuErrorText && (
+                <FormHelperText>{menuErrorText}</FormHelperText>
               )}
             </FormControl>
-          ) : (
-            <FormControl disabled={true}>
-              <Select defaultValue="disabled">
-                <MenuItem value="disabled">
-                  現在、空席がありません。申し訳ございませんが、日を改めてのご予約をよろしくお願い致します。
-                </MenuItem>
-              </Select>
-            </FormControl>
-          )}
-          <p>ご予約者氏名</p>
-          <TextField
-            error={nameErrorText !== ""}
-            helperText={nameErrorText}
-            onChange={this.setName.bind(this)}
-            onBlur={this.onBlurValidateName.bind(this)}
-          />
-          <p>連絡可能なメールアドレス</p>
-          <TextField
-            error={emailErrorText !== ""}
-            helperText={emailErrorText}
-            onChange={this.setEmail.bind(this)}
-            onBlur={this.onBlurValidateEmail.bind(this)}
-          />
-          <p>オプションメニュー</p>
-          <FormGroup row={true}>
-            {this.optionMenus.massageMenus.map(menu => {
-              return (
-                <FormControlLabel
-                  key={menu.id}
-                  control={
-                    <Checkbox
-                      value={menu.id}
-                      onChange={this.handleChangeCheckbox.bind(this)}
-                    />
-                  }
-                  label={`${menu.title} ${menu.treatmentTime}m ¥${menu.price}`}
-                />
-              )
-            })}
-          </FormGroup>
-          <p>パックのグレードアップ</p>
-          <FormControl>
-            <RadioGroup
-              value={selectedPackId}
-              onChange={this.setSelectedPackId.bind(this)}
-            >
-              {this.optionMenus.packs.map(p => {
+            <p>
+              希望の来店日時（予約可能日時が表示されますので、選択してください）
+            </p>
+            {reservableDateTimes.length > 0 ? (
+              <FormControl error={dateErrorText !== ""}>
+                <Select
+                  value={selectedDateId}
+                  onChange={this.setSelectedDateId.bind(this)}
+                  onBlur={this.onBlurValidateDate.bind(this)}
+                >
+                  {reservableDateTimes &&
+                    reservableDateTimes.map(date => {
+                      return (
+                        <MenuItem value={date.id} key={date.id}>
+                          {date.dateTime}
+                        </MenuItem>
+                      )
+                    })}
+                </Select>
+                {dateErrorText && (
+                  <FormHelperText>{dateErrorText}</FormHelperText>
+                )}
+              </FormControl>
+            ) : (
+              <FormControl disabled={true}>
+                <Select defaultValue="disabled">
+                  <MenuItem value="disabled">
+                    現在、空席がありません。申し訳ございませんが、日を改めてのご予約をよろしくお願い致します。
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            )}
+            <p>ご予約者氏名</p>
+            <TextField
+              error={nameErrorText !== ""}
+              helperText={nameErrorText}
+              onChange={this.setName.bind(this)}
+              onBlur={this.onBlurValidateName.bind(this)}
+            />
+            <p>連絡可能なメールアドレス</p>
+            <TextField
+              error={emailErrorText !== ""}
+              helperText={emailErrorText}
+              onChange={this.setEmail.bind(this)}
+              onBlur={this.onBlurValidateEmail.bind(this)}
+            />
+            <p>オプションメニュー</p>
+            <FormGroup row={true}>
+              {this.optionMenus.massageMenus.map(menu => {
                 return (
                   <FormControlLabel
-                    key={p.id}
-                    control={<Radio />}
-                    label={`${p.title} ¥${p.price}`}
-                    value={p.id}
+                    key={menu.id}
+                    control={
+                      <Checkbox
+                        value={menu.id}
+                        onChange={this.handleChangeCheckbox.bind(this)}
+                      />
+                    }
+                    label={`${menu.title} ${menu.treatmentTime}m ¥${menu.price}`}
                   />
                 )
               })}
-            </RadioGroup>
-          </FormControl>
-          <Button
-            onClick={this.onReservation.bind(this)}
-            className={this.isValid() ? classes.button : classes.disabledButton}
-            disabled={!this.isValid()}
-          >
-            予約する
-          </Button>
-        </div>
+            </FormGroup>
+            <p>パックのグレードアップ</p>
+            <FormControl>
+              <RadioGroup
+                value={selectedPackId}
+                onChange={this.setSelectedPackId.bind(this)}
+              >
+                {this.optionMenus.packs.map(p => {
+                  return (
+                    <FormControlLabel
+                      key={p.id}
+                      control={<Radio />}
+                      label={`${p.title} ¥${p.price}`}
+                      value={p.id}
+                    />
+                  )
+                })}
+              </RadioGroup>
+            </FormControl>
+            <Button onClick={this.onHoge.bind(this)}>hoge</Button>
+            <Button
+              onClick={this.onReservation.bind(this)}
+              className={
+                this.isValid() ? classes.button : classes.disabledButton
+              }
+              disabled={!this.isValid()}
+            >
+              予約する
+            </Button>
+          </div>
+        )}
       </Layout>
     )
   }
