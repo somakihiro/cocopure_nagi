@@ -16,6 +16,8 @@ import "moment/locale/ja"
 import Layout from "../components/layout"
 import CompletedReservation from "../components/completed_reservation"
 import { db } from "../../firebase-config"
+import firebase from "../../firebase-config"
+import "firebase/functions"
 
 class Reservation extends React.Component {
   constructor(props) {
@@ -237,14 +239,62 @@ class Reservation extends React.Component {
         name,
         email,
         reserved_flag: true,
-        option_menus,
+        option_menus: optionMenus,
       })
       .then(() => {
         this.setState({ isReserved: true })
+        try {
+          this.sendMailToAdmin(name, email, menu, selectedDateId, optionMenus)
+          this.sendMailToClient(name, email, menu, selectedDateId, optionMenus)
+        } catch (e) {
+          console.log(e)
+        }
       })
       .catch(error => {
         console.error("Error updating document: ", error)
       })
+  }
+
+  sendMailToAdmin(name, email, menu, dateId, optionMenus) {
+    const date = this.state.reservableDateTimes.find(d => d.id === dateId)
+    try {
+      const sendMailToAdmin = firebase
+        .functions()
+        .httpsCallable("sendMailToAdmin")
+      sendMailToAdmin({ name, email, menu, date, optionMenus })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  sendMailToClient(name, email, menu, dateId, optionMenus) {
+    const date = this.state.reservableDateTimes.find(d => d.id === dateId)
+    const totalPrice = this.separate(this.getTotalPrice())
+    try {
+      const sendMailToClient = firebase
+        .functions()
+        .httpsCallable("sendMailToClient")
+      sendMailToClient({ name, email, menu, date, optionMenus, totalPrice })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  onHoge() {
+    // const { selectedDateId, selectedMenuId, name, email } = this.state
+    // const selectedMenuIdForMenus = this.props.location.state
+    //   ? this.props.location.state.selectedMenuIdForMenus
+    //   : ""
+    // const menuId = selectedMenuId || selectedMenuIdForMenus
+    // const menu = this.menus.find(menu => menu.id === menuId)
+    // const optionMenus = this.getSelectedOptionMenus()
+    // // this.setState({ isReserved: true })
+    // try {
+    //   this.sendMailToAdmin(name, email, menu, selectedDateId, optionMenus)
+    //   this.sendMailToClient(name, email, menu, selectedDateId, optionMenus)
+    // } catch (e) {
+    //   console.log(e)
+    // }
   }
 
   getSelectedOptionMenus() {
@@ -252,7 +302,7 @@ class Reservation extends React.Component {
     const pack = this.optionMenus.packs.find(
       p => p.id === this.state.selectedPackId
     )
-    return { massage_menus: massageMenus, pack: pack.title }
+    return { massageMenus, pack }
   }
 
   isValid() {
@@ -298,6 +348,28 @@ class Reservation extends React.Component {
     this.setState({ emailErrorText })
   }
 
+  getTotalPrice() {
+    const { selectedMenuId } = this.state
+    const selectedMenuIdForMenus = this.props.location.state
+      ? this.props.location.state.selectedMenuIdForMenus
+      : ""
+    const menuId = selectedMenuId || selectedMenuIdForMenus
+    const menu = this.menus.find(menu => menu.id === menuId)
+    const optionMenus = this.getSelectedOptionMenus()
+    const priceArray = optionMenus.massageMenus.map(m => m.price)
+    priceArray.push(menu.price, optionMenus.pack.price)
+    const numberPriceArray = priceArray.map(p => Number(p.split(",").join("")))
+    const totalPrice = numberPriceArray.reduce(
+      (accumulator, currentValue) => accumulator + currentValue
+    )
+    return totalPrice
+  }
+
+  // 数値を料金表示するためにカンマで区切る
+  separate(num) {
+    return String(num).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+  }
+
   render() {
     const {
       reservableDateTimes,
@@ -317,6 +389,8 @@ class Reservation extends React.Component {
     const selectedMenuIdForMenus = this.props.location.state
       ? this.props.location.state.selectedMenuIdForMenus
       : ""
+
+    const totalPrice = this.getTotalPrice()
 
     return (
       <Layout>
@@ -424,6 +498,7 @@ class Reservation extends React.Component {
                 })}
               </RadioGroup>
             </FormControl>
+            <p>合計金額: {`¥${this.separate(totalPrice)}（税抜き）`}</p>
             <Button onClick={this.onHoge.bind(this)}>hoge</Button>
             <Button
               onClick={this.onReservation.bind(this)}
