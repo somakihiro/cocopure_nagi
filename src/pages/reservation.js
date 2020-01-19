@@ -32,6 +32,7 @@ class Reservation extends React.Component {
       nameErrorText: "",
       emailErrorText: "",
       isReserved: false,
+      checked: false,
     }
     this.menus = [
       {
@@ -217,6 +218,7 @@ class Reservation extends React.Component {
       menu => menu.id === Number(event.target.value)
     )
     menu.checked = !menu.checked
+    this.setState({ checked: true })
   }
 
   onReservation() {
