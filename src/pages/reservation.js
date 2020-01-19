@@ -24,6 +24,7 @@ class Reservation extends React.Component {
     super(props)
     this.state = {
       reservableDateTimes: [],
+      oneDayLimitedMenuDateTimes: [],
       selectedDateId: "",
       selectedMenuId: "",
       selectedPackId: 1,
@@ -169,6 +170,7 @@ class Reservation extends React.Component {
 
   componentDidMount() {
     this.getReservableDateTimes()
+    this.getOneDayLimitedMenuDateTimes()
   }
 
   getReservableDateTimes() {
@@ -181,13 +183,27 @@ class Reservation extends React.Component {
           if (document && document.reserved_flag) return
           reservableDateTimes.push({
             id: doc.id,
-            dateTime: moment(document.date.toDate()).format(
-              "YYYY/M/D (ddd) HH:mm"
-            ),
+            dateTime: document.date.toDate(),
           })
         })
       })
       .then(res => this.setState({ reservableDateTimes }))
+  }
+
+  getOneDayLimitedMenuDateTimes() {
+    const oneDayLimitedMenuDateTimes = []
+    db.collection("reservations")
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          const document = doc.data()
+          const menu = document && document.menu
+          if (menu && menu.id === 1) {
+            oneDayLimitedMenuDateTimes.push(document.date.toDate())
+          }
+        })
+      })
+      .then(res => this.setState({ oneDayLimitedMenuDateTimes }))
   }
 
   setSelectedMenuId(event) {
@@ -235,7 +251,7 @@ class Reservation extends React.Component {
     const docRef = db.collection("reservations").doc(selectedDateId)
     docRef
       .update({
-        menu: `${menu.title} ${menu.treatmentTime}m`,
+        menu,
         name,
         email,
         reserved_flag: true,
@@ -261,7 +277,13 @@ class Reservation extends React.Component {
       const sendMailToAdmin = firebase
         .functions()
         .httpsCallable("sendMailToAdmin")
-      sendMailToAdmin({ name, email, menu, date, optionMenus })
+      sendMailToAdmin({
+        name,
+        email,
+        menu,
+        date: moment(date.dateTime).format("YYYY/M/D (ddd) HH:mm"),
+        optionMenus,
+      })
     } catch (e) {
       console.log(e)
     }
@@ -274,27 +296,34 @@ class Reservation extends React.Component {
       const sendMailToClient = firebase
         .functions()
         .httpsCallable("sendMailToClient")
-      sendMailToClient({ name, email, menu, date, optionMenus, totalPrice })
+      sendMailToClient({
+        name,
+        email,
+        menu,
+        date: moment(date.dateTime).format("YYYY/M/D (ddd) HH:mm"),
+        optionMenus,
+        totalPrice,
+      })
     } catch (e) {
       console.log(e)
     }
   }
 
   onHoge() {
-    // const { selectedDateId, selectedMenuId, name, email } = this.state
-    // const selectedMenuIdForMenus = this.props.location.state
-    //   ? this.props.location.state.selectedMenuIdForMenus
-    //   : ""
-    // const menuId = selectedMenuId || selectedMenuIdForMenus
-    // const menu = this.menus.find(menu => menu.id === menuId)
-    // const optionMenus = this.getSelectedOptionMenus()
-    // // this.setState({ isReserved: true })
-    // try {
-    //   this.sendMailToAdmin(name, email, menu, selectedDateId, optionMenus)
-    //   this.sendMailToClient(name, email, menu, selectedDateId, optionMenus)
-    // } catch (e) {
-    //   console.log(e)
-    // }
+    const { selectedDateId, selectedMenuId, name, email } = this.state
+    const selectedMenuIdForMenus = this.props.location.state
+      ? this.props.location.state.selectedMenuIdForMenus
+      : ""
+    const menuId = selectedMenuId || selectedMenuIdForMenus
+    const menu = this.menus.find(menu => menu.id === menuId)
+    const optionMenus = this.getSelectedOptionMenus()
+    // this.setState({ isReserved: true })
+    try {
+      this.sendMailToAdmin(name, email, menu, selectedDateId, optionMenus)
+      this.sendMailToClient(name, email, menu, selectedDateId, optionMenus)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   getSelectedOptionMenus() {
@@ -372,7 +401,7 @@ class Reservation extends React.Component {
 
   render() {
     const {
-      reservableDateTimes,
+      oneDayLimitedMenuDateTimes,
       selectedDateId,
       selectedMenuId,
       selectedPackId,
@@ -384,6 +413,8 @@ class Reservation extends React.Component {
       isReserved,
     } = this.state
 
+    let { reservableDateTimes } = this.state
+
     const { classes } = this.props
 
     const selectedMenuIdForMenus = this.props.location.state
@@ -391,6 +422,27 @@ class Reservation extends React.Component {
       : ""
 
     const totalPrice = this.getTotalPrice()
+
+    if (
+      selectedMenuId === 1 ||
+      (!selectedMenuId && selectedMenuIdForMenus === 1)
+    ) {
+      if (
+        reservableDateTimes.length > 0 &&
+        oneDayLimitedMenuDateTimes.length > 0
+      ) {
+        reservableDateTimes = reservableDateTimes.filter(d => {
+          const rMonth = d.dateTime.getMonth()
+          const rDay = d.dateTime.getDate()
+          const evalArr = oneDayLimitedMenuDateTimes.map(
+            limitedMenuDate =>
+              rMonth === limitedMenuDate.getMonth() &&
+              rDay === limitedMenuDate.getDate()
+          )
+          return evalArr.indexOf(true) === -1
+        })
+      }
+    }
 
     return (
       <Layout>
@@ -431,7 +483,7 @@ class Reservation extends React.Component {
                     reservableDateTimes.map(date => {
                       return (
                         <MenuItem value={date.id} key={date.id}>
-                          {date.dateTime}
+                          {moment(date.dateTime).format("YYYY/M/D (ddd) HH:mm")}
                         </MenuItem>
                       )
                     })}
@@ -444,7 +496,9 @@ class Reservation extends React.Component {
               <FormControl disabled={true}>
                 <Select defaultValue="disabled">
                   <MenuItem value="disabled">
-                    現在、空席がありません。申し訳ございませんが、日を改めてのご予約をよろしくお願い致します。
+                    {this.state.reservableDateTimes.length > 0
+                      ? "限定メニューに空きがありません。申し訳ございませんが、他メニューのご予約をよろしくお願い致します。"
+                      : "現在、空席がありません。申し訳ございませんが、日を改めてのご予約をよろしくお願い致します。"}
                   </MenuItem>
                 </Select>
               </FormControl>

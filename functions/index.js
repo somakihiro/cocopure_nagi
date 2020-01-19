@@ -26,7 +26,7 @@ ${data.email}
 ${data.menu.title} 施術時間:  ${data.menu.treatmentTime}分
 
 ・来店日時
-${data.date.dateTime}
+${data.date}
 
 ・オプション
 ${data.optionMenus.massageMenus
@@ -65,7 +65,7 @@ const clientContents = data => {
 ※ご予約をキャンセルされる場合にも、本メールにご返信ください。
 
 ・来店日時
-${data.date.dateTime}
+${data.date}
 
 ・住所
 東京都大田区仲六郷1-10-1 イーストハイム仲六郷920
