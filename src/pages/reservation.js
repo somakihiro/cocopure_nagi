@@ -226,7 +226,7 @@ class Reservation extends React.Component {
       : ""
     const menuId = selectedMenuId || selectedMenuIdForMenus
     const menu = this.menus.find(menu => menu.id === menuId)
-    const option_menus = this.getSelectedOptionMenus()
+    const optionMenus = this.getSelectedOptionMenus()
 
     const docRef = db.collection("reservations").doc(selectedDateId)
     docRef
