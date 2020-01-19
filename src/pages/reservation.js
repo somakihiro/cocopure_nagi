@@ -10,8 +10,9 @@ import Button from "@material-ui/core/Button"
 import FormHelperText from "@material-ui/core/FormHelperText"
 import Radio from "@material-ui/core/Radio"
 import RadioGroup from "@material-ui/core/RadioGroup"
-import moment from "moment"
 import { withStyles } from "@material-ui/core/styles"
+import moment from "moment"
+import "moment/locale/ja"
 import Layout from "../components/layout"
 import CompletedReservation from "../components/completed_reservation"
 import { db } from "../../firebase-config"
@@ -177,7 +178,9 @@ class Reservation extends React.Component {
           if (document && document.reserved_flag) return
           reservableDateTimes.push({
             id: doc.id,
-            dateTime: moment(document.date.toDate()).format("M/D HH:mm"),
+            dateTime: moment(document.date.toDate()).format(
+              "YYYY/M/D (ddd) HH:mm"
+            ),
           })
         })
       })
