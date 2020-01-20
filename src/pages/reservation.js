@@ -13,6 +13,7 @@ import RadioGroup from "@material-ui/core/RadioGroup"
 import { withStyles } from "@material-ui/core/styles"
 import moment from "moment"
 import "moment/locale/ja"
+import _ from "lodash"
 import Layout from "../components/layout"
 import CompletedReservation from "../components/completed_reservation"
 import { db } from "../../firebase-config"
@@ -187,7 +188,11 @@ class Reservation extends React.Component {
           })
         })
       })
-      .then(res => this.setState({ reservableDateTimes }))
+      .then(res =>
+        this.setState({
+          reservableDateTimes: _.sortBy(reservableDateTimes, d => d.dateTime),
+        })
+      )
   }
 
   getOneDayLimitedMenuDateTimes() {
