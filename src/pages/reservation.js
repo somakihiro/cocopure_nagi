@@ -181,11 +181,20 @@ class Reservation extends React.Component {
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
           const document = doc.data()
-          if (document && document.reserved_flag) return
-          reservableDateTimes.push({
-            id: doc.id,
-            dateTime: document.date.toDate(),
-          })
+          if (document) {
+            const dateTime = document.date.toDate()
+            if (
+              document.reserved_flag ||
+              moment()
+                .add(1, "d")
+                .toDate() > dateTime
+            )
+              return
+            reservableDateTimes.push({
+              id: doc.id,
+              dateTime,
+            })
+          }
         })
       })
       .then(res =>
