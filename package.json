@@ -21,6 +21,7 @@
     "gatsby": "^2.18.12",
     "gatsby-plugin-material-ui": "^2.1.6",
     "gatsby-plugin-sass": "^2.1.26",
+    "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "node-sass": "^4.13.0",
     "react": "^16.12.0",
