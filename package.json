@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.8.3",
+    "@material-ui/lab": "^4.0.0-alpha.39",
     "@material-ui/styles": "^4.8.2",
     "firebase": "^7.6.2",
     "firebase-tools": "^7.12.1",

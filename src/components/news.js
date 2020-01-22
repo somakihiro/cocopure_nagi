@@ -1,7 +1,7 @@
 import React from "react"
 import moment from "moment"
-import RSSParser from "rss-parser"
 import Button from "@material-ui/core/Button"
+import Skeleton from "@material-ui/lab/Skeleton"
 import { withStyles } from "@material-ui/core/styles"
 
 class News extends React.Component {
@@ -9,29 +9,16 @@ class News extends React.Component {
     super(props)
     this.state = {
       news: [],
+      loading: true,
     }
   }
 
   componentDidMount() {
     const CORS_PROXY = "https://cors-anywhere.herokuapp.com/"
-
-    // const parser = new RSSParser()
-    // parser.parseURL(
-    //   CORS_PROXY + "https://note.com/soma_ch/rss",
-    //   (err, feed) => {
-    //     if (err) throw err
-    //     console.log(feed.images)
-    //     const news = feed.items.map(entry => entry).slice(0, 4)
-    //     this.setState({ news })
-    //   }
-    // )
-
     let xhr = new XMLHttpRequest()
-
     xhr.open("GET", CORS_PROXY + "https://note.com/soma_ch/rss")
     xhr.responseType = "document"
     xhr.send()
-
     xhr.onload = () => {
       const rss_data = xhr.response
       let items = rss_data.getElementsByTagName(`item`)
@@ -52,21 +39,37 @@ class News extends React.Component {
           imgSrc: img ? img.textContent : "",
         }
       })
-      this.setState({ news })
+      this.setState({ news, loading: false })
     }
   }
 
   render() {
-    const { news } = this.state
+    const { news, loading } = this.state
+    const skeletons = [1, 2]
     return (
       <div style={styles.newsWrapper}>
         <p style={styles.title}>News</p>
         <div>
-          {news.length > 0 ? (
+          {loading ? (
+            skeletons.map(s => (
+              <div style={styles.newsContainer}>
+                <div style={{ display: "flex" }}>
+                  <Skeleton variant="rect" style={styles.skeletonImage} />
+                  <div style={styles.textContainer}>
+                    <Skeleton variant="text" style={styles.skeletonNewsTitle} />
+                    <Skeleton variant="text" style={styles.skeletonContent} />
+                    <Skeleton variant="text" style={styles.skeletonContent} />
+                    <Skeleton variant="text" style={styles.skeletonContent} />
+                    <Skeleton variant="text" style={styles.skeletonContent} />
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : news.length > 0 ? (
             <div>
               {news.map(n => {
                 return (
-                  <div style={styles.newsContainer}>
+                  <div key={n.title} style={styles.newsContainer}>
                     <a
                       href={n.link}
                       style={styles.link}
@@ -139,6 +142,11 @@ const styles = {
     width: "25%",
     display: "inline-block",
   },
+  skeletonImage: {
+    width: "25%",
+    display: "inline-block",
+    height: "140px",
+  },
   textContainer: {
     display: "inline-block",
     width: "70%",
@@ -149,6 +157,9 @@ const styles = {
     fontSize: "17px",
     color: "#2D2926",
     letterSpacing: "0.8px",
+  },
+  skeletonNewsTitle: {
+    width: "35%",
   },
   noImageNewsTitle: {
     fontSize: "17px",
@@ -173,6 +184,10 @@ const styles = {
     margin: "8 0 12px",
     lineHeight: "20px",
   },
+  skeletonContent: {
+    margin: "8 0 12px",
+    lineHeight: "25px",
+  },
   buttonWrapper: {
     textAlign: "center",
     marginTop: "25px",
@@ -187,6 +202,10 @@ const styles = {
       background: "#42c7c1",
       opacity: 0.7,
     },
+  },
+  circularProgressWrapper: {
+    textAlign: "center",
+    marginTop: "100px",
   },
 }
 
