@@ -1,6 +1,7 @@
 import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Layout from "../components/layout"
+import News from "../components/news"
 import topImg from "../images/top.jpg"
 
 export default () => {
@@ -22,6 +23,7 @@ export default () => {
           <br />
           心よりお待ちしております。
         </p>
+        <News />
       </div>
     </Layout>
   )
