@@ -18,7 +18,11 @@ export default props => (
         <Link to="/profile">PROFILE</Link>
       </div>
       <div className={`link`}>
-        <a href="https://note.com/soma_ch" rel="noreferrer" target="_blank">
+        <a
+          href="https://note.com/cocopure_nagi"
+          rel="noreferrer"
+          target="_blank"
+        >
           News
         </a>
       </div>

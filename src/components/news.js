@@ -16,7 +16,7 @@ class News extends React.Component {
   componentDidMount() {
     const CORS_PROXY = "https://cors-anywhere.herokuapp.com/"
     let xhr = new XMLHttpRequest()
-    xhr.open("GET", CORS_PROXY + "https://note.com/soma_ch/rss")
+    xhr.open("GET", CORS_PROXY + "https://note.com/cocopure_nagi/rss")
     xhr.responseType = "document"
     xhr.send()
     xhr.onload = () => {
@@ -102,7 +102,7 @@ class News extends React.Component {
               })}
               <div style={styles.buttonWrapper}>
                 <a
-                  href="https://note.com/soma_ch"
+                  href="https://note.com/cocopure_nagi"
                   rel="noreferrer"
                   target="_blank"
                   style={{ textDecoration: "none" }}
