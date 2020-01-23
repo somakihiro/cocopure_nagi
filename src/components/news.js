@@ -2,6 +2,7 @@ import React from "react"
 import moment from "moment"
 import Button from "@material-ui/core/Button"
 import Skeleton from "@material-ui/lab/Skeleton"
+import DescriptionIcon from "@material-ui/icons/Description"
 import { withStyles } from "@material-ui/core/styles"
 
 class News extends React.Component {
@@ -112,7 +113,13 @@ class News extends React.Component {
               </div>
             </div>
           ) : (
-            <p>Newsはまだありません</p>
+            <div style={styles.noNewsContainer}>
+              <DescriptionIcon
+                color="disabled"
+                style={styles.descriptionIcon}
+              />
+              <p style={styles.noNewsText}>まだNewsはありません</p>
+            </div>
           )}
         </div>
       </div>
@@ -206,6 +213,18 @@ const styles = {
   circularProgressWrapper: {
     textAlign: "center",
     marginTop: "100px",
+  },
+  noNewsContainer: {
+    textAlign: "center",
+    margin: "50px 0",
+  },
+  descriptionIcon: {
+    fontSize: "70px",
+    marginBottom: "30px",
+  },
+  noNewsText: {
+    fontSize: "17px",
+    color: "#a8abb1",
   },
 }
 
