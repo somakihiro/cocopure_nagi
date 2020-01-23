@@ -20,7 +20,7 @@ export default props => (
       <div className={`link`}>
         <a
           href="https://note.com/cocopure_nagi"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           target="_blank"
         >
           News

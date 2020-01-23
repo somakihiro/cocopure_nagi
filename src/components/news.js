@@ -74,10 +74,12 @@ class News extends React.Component {
                     <a
                       href={n.link}
                       style={styles.link}
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       target="_blank"
                     >
-                      {n.imgSrc && <img style={styles.image} src={n.imgSrc} />}
+                      {n.imgSrc && (
+                        <img style={styles.image} src={n.imgSrc} alt="" />
+                      )}
                       <div style={n.imgSrc ? styles.textContainer : {}}>
                         <p
                           style={
@@ -104,7 +106,7 @@ class News extends React.Component {
               <div style={styles.buttonWrapper}>
                 <a
                   href="https://note.com/cocopure_nagi"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   target="_blank"
                   style={{ textDecoration: "none" }}
                 >
