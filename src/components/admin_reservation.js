@@ -182,33 +182,44 @@ class AdminReservation extends React.Component {
               : "予約を削除すると、該当の予約内容（営業日含める）が全て削除されます。本当に削除しますか？"
           }
         />
-        <p>営業日の追加</p>
+        <p style={{ fontSize: "20px" }}>営業日の追加</p>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
-            variant="inline"
-            format="yyyy/MM/dd"
-            margin="normal"
-            id="date-picker-inline"
-            label="Date picker inline"
-            value={selectedDate}
-            onChange={this.handleDateChange.bind(this)}
-            KeyboardButtonProps={{
-              "aria-label": "change date",
-            }}
-          />
-          <KeyboardTimePicker
-            margin="normal"
-            id="time-picker"
-            label="Time picker"
-            value={selectedDate}
-            onChange={this.handleDateChange.bind(this)}
-            KeyboardButtonProps={{
-              "aria-label": "change time",
-            }}
-          />
+          <div>
+            <KeyboardDatePicker
+              variant="inline"
+              format="yyyy/MM/dd"
+              margin="normal"
+              id="date-picker-inline"
+              label="日付選択"
+              value={selectedDate}
+              onChange={this.handleDateChange.bind(this)}
+              KeyboardButtonProps={{
+                "aria-label": "change date",
+              }}
+            />
+          </div>
+          <div>
+            <KeyboardTimePicker
+              margin="normal"
+              id="time-picker"
+              label="時間選択"
+              value={selectedDate}
+              onChange={this.handleDateChange.bind(this)}
+              KeyboardButtonProps={{
+                "aria-label": "change time",
+              }}
+            />
+          </div>
         </MuiPickersUtilsProvider>
-        <Button onClick={this.addReservation.bind(this)}>追加</Button>
-        <p>予約一覧</p>
+        <Button
+          style={{ marginTop: "15px" }}
+          variant="contained"
+          color="primary"
+          onClick={this.addReservation.bind(this)}
+        >
+          追加
+        </Button>
+        <p style={styles.reservationIndexTitle}>予約一覧</p>
         {reservations.map(r => {
           const date = moment(r.date.toDate()).format("YYYY/M/D (ddd) HH:mm")
           return (
@@ -219,7 +230,9 @@ class AdminReservation extends React.Component {
             >
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 <p>{date}</p>
-                <p>予約状況 {r.reserved_flag ? "○" : "×"}</p>
+                <p style={{ paddingLeft: "25px" }}>
+                  予約状況 {r.reserved_flag ? "○" : "×"}
+                </p>
               </ExpansionPanelSummary>
               {r.reserved_flag ? (
                 <div>
@@ -265,11 +278,20 @@ class AdminReservation extends React.Component {
                 </Button>
                 */}
                 {r.reserved_flag && (
-                  <Button onClick={this.handleCancel.bind(this, r.id)}>
+                  <Button
+                    style={{ marginRight: "15px" }}
+                    variant="contained"
+                    color="primary"
+                    onClick={this.handleCancel.bind(this, r.id)}
+                  >
                     キャンセル
                   </Button>
                 )}
-                <Button onClick={this.handleDelete.bind(this, r.id)}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={this.handleDelete.bind(this, r.id)}
+                >
                   削除
                 </Button>
               </ExpansionPanelDetails>
@@ -287,6 +309,11 @@ const styles = {
     maxWidth: "1000px",
     maxHeight: "800px",
     margin: "0 auto",
+  },
+  reservationIndexTitle: {
+    marginTop: "40px",
+    marginBottom: "20px",
+    fontSize: "20px",
   },
   // modal: {
   //   position: "absolute",

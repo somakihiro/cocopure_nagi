@@ -85,7 +85,7 @@ const styles = {
     color: "white",
     height: 48,
     padding: "0 30px",
-    width: "25%",
+    width: "100%",
     marginTop: "25px",
     "&:hover": {
       background: "#42c7c1",
