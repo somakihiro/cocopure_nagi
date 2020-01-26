@@ -2,7 +2,7 @@ import React from "react"
 import _ from "lodash"
 import moment from "moment"
 import { withStyles } from "@material-ui/core/styles"
-import Modal from "@material-ui/core/Modal"
+// import Modal from "@material-ui/core/Modal"
 import ExpansionPanel from "@material-ui/core/ExpansionPanel"
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails"
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary"
@@ -15,6 +15,7 @@ import {
 } from "@material-ui/pickers"
 import Button from "@material-ui/core/Button"
 import { db } from "../../firebase-config"
+import Dialog from "./dialog"
 
 class AdminReservation extends React.Component {
   constructor(props) {
@@ -23,6 +24,10 @@ class AdminReservation extends React.Component {
       reservations: [],
       expanded: false,
       selectedDate: new Date(),
+      isDialogOpenForCancel: false,
+      isDialogOpenForDelete: false,
+      cancelId: null,
+      deleteId: null,
       // isEditModalOpen: false,
       // editReservation: {},
     }
@@ -90,7 +95,10 @@ class AdminReservation extends React.Component {
         menu: {},
         option_menus: {},
       })
-      .then(() => this.getReservations())
+      .then(() => {
+        this.getReservations()
+        this.setState({ isDialogOpenForCancel: false })
+      })
       .catch(e => console.log(e))
   }
 
@@ -98,8 +106,28 @@ class AdminReservation extends React.Component {
     db.collection("reservations")
       .doc(reservationId)
       .delete()
-      .then(() => this.getReservations())
+      .then(() => {
+        this.getReservations()
+        this.setState({ isDialogOpenForDelete: false })
+      })
       .catch(e => console.log(e))
+  }
+
+  handleCancel(reservationId) {
+    this.setState({ isDialogOpenForCancel: true, cancelId: reservationId })
+  }
+
+  handleDelete(reservationId) {
+    this.setState({ isDialogOpenForDelete: true, deleteId: reservationId })
+  }
+
+  closeDialog() {
+    const { isDialogOpenForCancel } = this.state
+    if (isDialogOpenForCancel) {
+      this.setState({ isDialogOpenForCancel: false })
+    } else {
+      this.setState({ isDialogOpenForDelete: false })
+    }
   }
 
   // openEditModal(reservationId) {
@@ -113,7 +141,15 @@ class AdminReservation extends React.Component {
   // }
 
   render() {
-    const { reservations, expanded, selectedDate } = this.state
+    const {
+      reservations,
+      expanded,
+      selectedDate,
+      isDialogOpenForCancel,
+      isDialogOpenForDelete,
+      cancelId,
+      deleteId,
+    } = this.state
     return (
       <div>
         {/*
@@ -131,6 +167,21 @@ class AdminReservation extends React.Component {
           </div>
         </Modal>
         */}
+        <Dialog
+          open={isDialogOpenForCancel || isDialogOpenForDelete}
+          handleClose={this.closeDialog.bind(this)}
+          exec={
+            isDialogOpenForCancel
+              ? this.cancel.bind(this, cancelId)
+              : this.deleteReservation.bind(this, deleteId)
+          }
+          title={isDialogOpenForCancel ? "予約のキャンセル" : "予約の削除"}
+          contentText={
+            isDialogOpenForCancel
+              ? "予約のキャンセルをすると、予約内容が削除され空席となります。本当にキャンセルしますか？"
+              : "予約を削除すると、該当の予約内容（営業日含める）が全て削除されます。本当に削除しますか？"
+          }
+        />
         <p>営業日の追加</p>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <KeyboardDatePicker
@@ -214,11 +265,11 @@ class AdminReservation extends React.Component {
                 </Button>
                 */}
                 {r.reserved_flag && (
-                  <Button onClick={this.cancel.bind(this, r.id)}>
+                  <Button onClick={this.handleCancel.bind(this, r.id)}>
                     キャンセル
                   </Button>
                 )}
-                <Button onClick={this.deleteReservation.bind(this, r.id)}>
+                <Button onClick={this.handleDelete.bind(this, r.id)}>
                   削除
                 </Button>
               </ExpansionPanelDetails>
