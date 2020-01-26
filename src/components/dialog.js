@@ -26,7 +26,7 @@ export default props => (
         <DialogContentText>{props.contentText}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button autoFocus={true} onClick={props.handleClose} color="primary">
+        <Button onClick={props.handleClose} color="primary">
           いいえ
         </Button>
         <Button onClick={props.exec} color="primary">
