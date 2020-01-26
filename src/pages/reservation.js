@@ -397,6 +397,7 @@ class Reservation extends React.Component {
       ? this.props.location.state.selectedMenuIdForMenus
       : ""
     const menuId = selectedMenuId || selectedMenuIdForMenus
+    if (!menuId) return 0
     const menu = this.menus.find(menu => menu.id === menuId)
     const optionMenus = this.getSelectedOptionMenus()
     const priceArray = optionMenus.massageMenus.map(m => m.price)
