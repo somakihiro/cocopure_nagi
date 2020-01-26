@@ -461,7 +461,7 @@ class Reservation extends React.Component {
 
     return (
       <Layout>
-        {isReserved ? (
+        {true ? (
           <CompletedReservation email={email} />
         ) : (
           <div className={classes.wrapper}>
