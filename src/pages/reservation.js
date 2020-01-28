@@ -10,6 +10,7 @@ import Button from "@material-ui/core/Button"
 import FormHelperText from "@material-ui/core/FormHelperText"
 import Radio from "@material-ui/core/Radio"
 import RadioGroup from "@material-ui/core/RadioGroup"
+import Paper from "@material-ui/core/Paper"
 import { withStyles } from "@material-ui/core/styles"
 import moment from "moment"
 import "moment/locale/ja"
@@ -461,123 +462,145 @@ class Reservation extends React.Component {
 
     return (
       <Layout>
-        {true ? (
+        {isReserved ? (
           <CompletedReservation email={email} />
         ) : (
           <div className={classes.wrapper}>
-            <p>メニュー</p>
-            <FormControl error={menuErrorText !== ""}>
-              <Select
-                value={selectedMenuId || selectedMenuIdForMenus}
-                onChange={this.setSelectedMenuId.bind(this)}
-                onBlur={this.onBlurValidateMenu.bind(this)}
-              >
-                {this.menus.map(menu => {
-                  return (
-                    <MenuItem key={menu.id} value={menu.id}>
-                      {menu.title} {menu.treatmentTime}m ¥{menu.price}
-                    </MenuItem>
-                  )
-                })}
-              </Select>
-              {menuErrorText && (
-                <FormHelperText>{menuErrorText}</FormHelperText>
-              )}
-            </FormControl>
-            <p>
-              希望の来店日時（予約可能日時が表示されますので、選択してください）
-            </p>
-            {reservableDateTimes.length > 0 ? (
-              <FormControl error={dateErrorText !== ""}>
-                <Select
-                  value={selectedDateId}
-                  onChange={this.setSelectedDateId.bind(this)}
-                  onBlur={this.onBlurValidateDate.bind(this)}
+            <p className={classes.title}>予約</p>
+            <Paper className={classes.paper} elevation={3}>
+              <div className={classes.formContainer}>
+                <p className={classes.formTitle}>メニュー</p>
+                <FormControl
+                  className={classes.FormControl}
+                  error={menuErrorText !== ""}
                 >
-                  {reservableDateTimes &&
-                    reservableDateTimes.map(date => {
+                  <Select
+                    value={selectedMenuId || selectedMenuIdForMenus}
+                    onChange={this.setSelectedMenuId.bind(this)}
+                    onBlur={this.onBlurValidateMenu.bind(this)}
+                  >
+                    {this.menus.map(menu => {
                       return (
-                        <MenuItem value={date.id} key={date.id}>
-                          {moment(date.dateTime).format("YYYY/M/D (ddd) HH:mm")}
+                        <MenuItem key={menu.id} value={menu.id}>
+                          {menu.title}
                         </MenuItem>
                       )
                     })}
-                </Select>
-                {dateErrorText && (
-                  <FormHelperText>{dateErrorText}</FormHelperText>
+                  </Select>
+                  {menuErrorText && (
+                    <FormHelperText>{menuErrorText}</FormHelperText>
+                  )}
+                </FormControl>
+              </div>
+              <div className={classes.formContainer}>
+                <p className={classes.formTitle}>
+                  希望の来店日時（予約可能日時が表示されますので、選択してください）
+                </p>
+                {reservableDateTimes.length > 0 ? (
+                  <FormControl error={dateErrorText !== ""}>
+                    <Select
+                      value={selectedDateId}
+                      onChange={this.setSelectedDateId.bind(this)}
+                      onBlur={this.onBlurValidateDate.bind(this)}
+                    >
+                      {reservableDateTimes &&
+                        reservableDateTimes.map(date => {
+                          return (
+                            <MenuItem value={date.id} key={date.id}>
+                              {moment(date.dateTime).format(
+                                "YYYY/M/D (ddd) HH:mm"
+                              )}
+                            </MenuItem>
+                          )
+                        })}
+                    </Select>
+                    {dateErrorText && (
+                      <FormHelperText>{dateErrorText}</FormHelperText>
+                    )}
+                  </FormControl>
+                ) : (
+                  <FormControl disabled={true}>
+                    <Select defaultValue="disabled">
+                      <MenuItem value="disabled">
+                        {this.state.reservableDateTimes.length > 0
+                          ? "限定メニューに空きがありません。申し訳ございませんが、他メニューのご予約をよろしくお願い致します。"
+                          : "現在、空席がありません。申し訳ございませんが、日を改めてのご予約をよろしくお願い致します。"}
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
                 )}
-              </FormControl>
-            ) : (
-              <FormControl disabled={true}>
-                <Select defaultValue="disabled">
-                  <MenuItem value="disabled">
-                    {this.state.reservableDateTimes.length > 0
-                      ? "限定メニューに空きがありません。申し訳ございませんが、他メニューのご予約をよろしくお願い致します。"
-                      : "現在、空席がありません。申し訳ございませんが、日を改めてのご予約をよろしくお願い致します。"}
-                  </MenuItem>
-                </Select>
-              </FormControl>
-            )}
-            <p>ご予約者氏名</p>
-            <TextField
-              error={nameErrorText !== ""}
-              helperText={nameErrorText}
-              onChange={this.setName.bind(this)}
-              onBlur={this.onBlurValidateName.bind(this)}
-            />
-            <p>連絡可能なメールアドレス</p>
-            <TextField
-              error={emailErrorText !== ""}
-              helperText={emailErrorText}
-              onChange={this.setEmail.bind(this)}
-              onBlur={this.onBlurValidateEmail.bind(this)}
-            />
-            <p>オプションメニュー</p>
-            <FormGroup row={true}>
-              {this.optionMenus.massageMenus.map(menu => {
-                return (
-                  <FormControlLabel
-                    key={menu.id}
-                    control={
-                      <Checkbox
-                        value={menu.id}
-                        onChange={this.handleChangeCheckbox.bind(this)}
+              </div>
+              <div className={classes.formContainer}>
+                <p className={classes.formTitle}>ご予約者氏名</p>
+                <TextField
+                  error={nameErrorText !== ""}
+                  helperText={nameErrorText}
+                  onChange={this.setName.bind(this)}
+                  onBlur={this.onBlurValidateName.bind(this)}
+                />
+              </div>
+              <div className={classes.formContainer}>
+                <p className={classes.formTitle}>連絡可能なメールアドレス</p>
+                <TextField
+                  error={emailErrorText !== ""}
+                  helperText={emailErrorText}
+                  onChange={this.setEmail.bind(this)}
+                  onBlur={this.onBlurValidateEmail.bind(this)}
+                />
+              </div>
+              <div className={classes.formContainer}>
+                <p className={classes.formTitle}>オプションメニュー</p>
+                <FormGroup>
+                  {this.optionMenus.massageMenus.map(menu => {
+                    return (
+                      <FormControlLabel
+                        key={menu.id}
+                        control={
+                          <Checkbox
+                            value={menu.id}
+                            onChange={this.handleChangeCheckbox.bind(this)}
+                          />
+                        }
+                        label={`${menu.title} ${menu.treatmentTime}m ¥${menu.price}`}
                       />
-                    }
-                    label={`${menu.title} ${menu.treatmentTime}m ¥${menu.price}`}
-                  />
-                )
-              })}
-            </FormGroup>
-            <p>パックのグレードアップ</p>
-            <FormControl>
-              <RadioGroup
-                value={selectedPackId}
-                onChange={this.setSelectedPackId.bind(this)}
-              >
-                {this.optionMenus.packs.map(p => {
-                  return (
-                    <FormControlLabel
-                      key={p.id}
-                      control={<Radio />}
-                      label={`${p.title} ¥${p.price}`}
-                      value={p.id}
-                    />
-                  )
-                })}
-              </RadioGroup>
-            </FormControl>
-            <p>合計金額: {`¥${this.separate(totalPrice)}（税抜き）`}</p>
-            <Button onClick={this.onHoge.bind(this)}>hoge</Button>
-            <Button
-              onClick={this.onReservation.bind(this)}
-              className={
-                this.isValid() ? classes.button : classes.disabledButton
-              }
-              disabled={!this.isValid()}
-            >
-              予約する
-            </Button>
+                    )
+                  })}
+                </FormGroup>
+              </div>
+              <div className={classes.formContainer}>
+                <p className={classes.formTitle}>パックのグレードアップ</p>
+                <FormControl>
+                  <RadioGroup
+                    value={selectedPackId}
+                    onChange={this.setSelectedPackId.bind(this)}
+                  >
+                    {this.optionMenus.packs.map(p => {
+                      return (
+                        <FormControlLabel
+                          key={p.id}
+                          control={<Radio />}
+                          label={`${p.title} ¥${p.price}`}
+                          value={p.id}
+                        />
+                      )
+                    })}
+                  </RadioGroup>
+                </FormControl>
+              </div>
+              <p className={classes.totalPriceTitle}>合計金額（税抜き）:</p>
+              <p className={classes.totalPrice}>¥{this.separate(totalPrice)}</p>
+              <div className={classes.buttonWrapper}>
+                <Button
+                  onClick={this.onReservation.bind(this)}
+                  className={
+                    this.isValid() ? classes.button : classes.disabledButton
+                  }
+                  disabled={!this.isValid()}
+                >
+                  予約する
+                </Button>
+              </div>
+            </Paper>
           </div>
         )}
       </Layout>
@@ -585,20 +608,74 @@ class Reservation extends React.Component {
   }
 }
 
-const styles = {
+const styles = theme => ({
   wrapper: {
     maxWidth: "1000px",
     margin: "0 auto",
     padding: "70px 16px 104px",
+    [theme.breakpoints.down("xs")]: {
+      maxWidth: "1000px",
+      margin: "0 auto",
+      padding: "40px 15px 0",
+    },
+  },
+  title: {
+    fontSize: "30px",
+    color: "#ED7483",
+    marginBottom: "55px",
+    textAlign: "center",
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "20px",
+      marginBottom: "40px",
+    },
+  },
+  paper: {
+    padding: "100px",
+    [theme.breakpoints.down("xs")]: {
+      padding: "10px 5px",
+    },
+  },
+  formContainer: {
+    marginBottom: "40px",
+  },
+  formTitle: {
+    marginBottom: "15px",
+    borderLeft: "3px solid #ED7483",
+    padding: "5px 10px",
+  },
+  FormControl: {
+    width: "100%",
+  },
+  menuItem: {
+    fontSize: "1px",
+  },
+  totalPriceTitle: {
+    fontWeight: "bold",
+    display: "inline-block",
+    paddingRight: "15px",
+  },
+  totalPrice: {
+    display: "inline-block",
+    color: "#ED7483",
+    fontWeight: "bold",
+    letterSpacing: "3px",
+  },
+  buttonWrapper: {
+    marginTop: "20px",
   },
   button: {
-    background: "#42c7c1",
+    background: "#ED7483",
     color: "white",
     height: 48,
     padding: "0 30px",
+    diplay: "block",
+    marginTop: "20px",
     "&:hover": {
-      background: "#42c7c1",
+      background: "#ED7483",
       opacity: 0.7,
+    },
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
     },
   },
   disabledButton: {
@@ -606,7 +683,12 @@ const styles = {
     color: "white",
     height: 48,
     padding: "0 30px",
+    diplay: "block",
+    marginTop: "20px",
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+    },
   },
-}
+})
 
 export default withStyles(styles)(Reservation)
