@@ -11,6 +11,9 @@ import FormHelperText from "@material-ui/core/FormHelperText"
 import Radio from "@material-ui/core/Radio"
 import RadioGroup from "@material-ui/core/RadioGroup"
 import Paper from "@material-ui/core/Paper"
+import Modal from "@material-ui/core/Modal"
+import Card from "@material-ui/core/Card"
+import CardContent from "@material-ui/core/CardContent"
 import { withStyles } from "@material-ui/core/styles"
 import moment from "moment"
 import "moment/locale/ja"
@@ -20,6 +23,14 @@ import CompletedReservation from "../components/completed_reservation"
 import { db } from "../../firebase-config"
 import firebase from "../../firebase-config"
 import "firebase/functions"
+import specialMenuImg from "../images/special_menu.jpg"
+import standardImg from "../images/standard.jpg"
+import standardPlusImg from "../images/standard_plus.jpg"
+import whiteningImg from "../images/whitening.jpg"
+import whiteningPlusImg from "../images/whitening_plus.jpg"
+import emsImg from "../images/ems.jpg"
+import emsPlusImg from "../images/ems_plus.jpg"
+import bodyImg from "../images/body.jpg"
 
 class Reservation extends React.Component {
   constructor(props) {
@@ -32,12 +43,14 @@ class Reservation extends React.Component {
       selectedPackId: 1,
       name: "",
       email: "",
-      menuErrorText: "",
       dateErrorText: "",
       nameErrorText: "",
       emailErrorText: "",
       isReserved: false,
       checked: false,
+      isMenuChange: false,
+      isShowDetailModal: false,
+      detailMenuId: "",
     }
     this.menus = [
       {
@@ -45,48 +58,88 @@ class Reservation extends React.Component {
         title: "凪ロイヤルトリートメント フェイシャルパックのお土産付き",
         treatmentTime: 150,
         price: "30,000",
+        description:
+          "全身フルボディ・フルフェイシャル(美白ケア・たるみケアを兼ね備えた)コースになります。効果を持続できる様にお家でご使用いただけるフェイシャルパックのお土産付きです。全身の血流が良くなり、老廃物の排泄を促す事により、身体が軽くなり美肌効果も♡ 疲れが溜まっている方やお顔のくすみ・たるみにも効果的です。毎日頑張っているご自分へのご褒美にゆったりとリラクゼーションをご堪能ください。",
+        treatmentContent:
+          "脚裏→ヒップ→背中〜首筋→脚表→お腹→腕→クレンジング→エレクトロクレンジング→2種の美容機器による首筋デコルテ•顔まで引き上げ→クレイパック→デコルテマッサージ→顔マッサージ→ディーポレーション(マシンによる高分子美容有効成分導入)→水素パック→頭皮マッサージ or スリーミーによる全身ストレッチ→整肌",
+        imgSrc: specialMenuImg,
       },
       {
         id: 2,
         title: "ファイシャル スタンダードコース",
         treatmentTime: 45,
         price: "5,500",
+        description:
+          "肌表面に微電流を流す事で普段のクレンジングや洗顔では落としきれない毛穴、皮溝に入り込んだ汚れを吸着、除去していきます。そして顔マッサージ、クレイパックにより、血行促進、くすみ改善を促します。あまりお時間の取れない方にお薦めのコースです。",
+        treatmentContent:
+          "クレンジング→エレクトロクレンジング→クレイパック→顔マッサージ→鎮静パック→頭皮マッサージ or スリーミーによる全身ストレッチ→整肌",
+        imgSrc: standardImg,
       },
       {
         id: 3,
         title: "ファイシャル スタンダードコース",
         treatmentTime: 60,
         price: "7,500",
+        description:
+          "スタンダード 45分コースにデコルテマッサージをプラスしたコースです。デコルテをしっかり丹念に凝りをほぐす事で、血行促進、代謝UPを促しお肌のくすみやムクミをすっきりとさせます。またクレイパックは、血行促進、細胞、新陳代謝の活性化の効果があり、ニキビ、肌荒れ、シミ、シワ、敏感肌の改善にも期待が持て、リフトアップ、アンチエイジング(老化防止)にはもっとも効果的です。",
+        treatmentContent:
+          "クレンジング→エレクトロクレンジング→クレイパック→デコルテマッサージ→顔マッサージ→鎮静パック→頭皮マッサージ or スリーミーによる全身ストレッチ→整肌",
+        imgSrc: standardPlusImg,
       },
       {
         id: 4,
         title: "ファイシャル 美白ケアコース",
         treatmentTime: 70,
         price: "9,500",
+        description:
+          "スタンダード 60分コースにディーポレーション美容液導入をプラスしたコースです。デコルテをしっかりとほぐしながら、クレイパック、顔マッサージで血行促進、代謝UPを促した後、美容液を導入していきます。美容機器を使い表皮・真皮層にまで美容液を浸透させ、お肌の細胞を元気にしムクミ、くすみ改善を促します。",
+        treatmentContent:
+          "クレンジング→エレクトロクレンジング→クレイパック→デコルテマッサージ→顔マッサージ→ディーポレーション(マシンによる高分子美容有効成分導入)→鎮静パック→頭皮マッサージ or スリーミーによる全身ストレッチ→整肌",
+        imgSrc: whiteningImg,
       },
       {
         id: 5,
         title: "ファイシャル 美白ケアコース",
         treatmentTime: 100,
         price: "13,500",
+        description:
+          "美白ケア 70分コースに背中〜首筋マッサージをプラスし丹念に凝りをほぐす事で、血行促進、代謝UP、お肌のくすみやムクミをすっきりとさせます。 そして2種の美容機器を使い表皮・皮層にまで美容液を浸透、美白、ハリ、ツヤのあるお肌へと促します。お肌の細胞を元気にし回復力をUP、より透明感・美白効果が期待できます",
+        treatmentContent:
+          "背中〜首筋マッサージ→クレンジング→エレクトロクレンジング→クレイパック→デコルテマッサージ→顔マッサージ→ディーポレーション(マシンによる高分子美容有効成分導入)→マシンによる可視光線照射→鎮静パック→頭皮マッサージ or スリーミーによる全身ストレッチ→整肌",
+        imgSrc: whiteningPlusImg,
       },
       {
         id: 6,
         title: "ファイシャル EMSたるみケアコース",
         treatmentTime: 70,
         price: "9,500",
+        description:
+          "スタンダードコースにEMSによる顔筋に働きかける表情筋トレーニングをプラスしたコースです。デコルテをしっかりとほぐしながら、クレイパック、顔マッサージで血行促進、代謝UPを促した後、EMSで表情筋にアプローチをしていきます。シワの改善、リフトアップ、フェイスラインの引き締めに効果的です。",
+        treatmentContent:
+          "クレンジング→*エレクトロクレンジング→表情筋EMS(マシンにより表情筋を効果的にエクササイズ)→クレイパック→デコルテマッサージ→顔マッサージ→鎮静パック→頭皮マッサージ or スリーミーによる全身ストレッチ→整肌",
+        imgSrc: emsImg,
       },
       {
         id: 7,
         title: "ファイシャル EMSたるみケアコース",
         treatmentTime: 100,
         price: "13,500",
+        description:
+          "EMSたるみケア 70分コースに背中〜首筋マッサージをプラスし丹念に凝りをほぐす事で、血行促進、代謝UP、お肌のくすみやムクミをすっきりとさせます。そして2種の美容機器(コラーゲンへ働きかける美容機器RF波とEMS)で首筋〜デコルテ・顔までアプローチしていきます。肩まわり、顔まわりがスッキリして私も大好きなコースです。",
+        treatmentContent:
+          "背中〜首筋マッサージ→クレンジング→エレクトロクレンジング →2種の美容機器による首筋デコルテ・顔まで引き上げ→クレイパック→デコルテマッサージ→顔マッサージ→鎮静パック→頭皮マッサージ or スリーミーによる全身ストレッチ→整肌",
+        imgSrc: emsPlusImg,
       },
       {
         id: 8,
         title: "全身すっきりリンパトリートメント",
         treatmentTime: 70,
         price: "11,000",
+        description:
+          "オールハンドのリンパオイルマッサージにより身体全体をほぐし、溜まった老廃物を流します。血行促進、こり、冷え性、疲労回復、ダイエットなどに効果的です。",
+        treatmentContent:
+          "脚裏→ヒップ→背中〜首筋→脚表→お腹→腕→ スリーミーによる全身ストレッチ",
+        imgSrc: bodyImg,
       },
     ]
     this.optionMenus = {
@@ -219,10 +272,6 @@ class Reservation extends React.Component {
         })
       })
       .then(res => this.setState({ oneDayLimitedMenuDateTimes }))
-  }
-
-  setSelectedMenuId(event) {
-    this.setState({ selectedMenuId: event.target.value })
   }
 
   setSelectedDateId(event) {
@@ -363,12 +412,6 @@ class Reservation extends React.Component {
     )
   }
 
-  onBlurValidateMenu(event) {
-    const menuId = event.target.value
-    const menuErrorText = menuId !== "" ? "" : "選択してください"
-    this.setState({ menuErrorText })
-  }
-
   onBlurValidateDate(event) {
     const dateId = event.target.value
     const dateErrorText = dateId !== "" ? "" : "選択してください"
@@ -415,6 +458,28 @@ class Reservation extends React.Component {
     return String(num).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
   }
 
+  getSelectedMenu(id) {
+    if (!id) return
+    return this.menus.find(menu => menu.id === id)
+  }
+
+  setIsMenuChange(bool) {
+    this.setState({ isMenuChange: bool })
+  }
+
+  changeMenu(menuId) {
+    this.setState({ isMenuChange: false, selectedMenuId: menuId })
+  }
+
+  showMenuDetailModal(menuId, event) {
+    event.stopPropagation()
+    this.setState({ isShowDetailModal: true, detailMenuId: menuId })
+  }
+
+  hideMenuDetailModal() {
+    this.setState({ isShowDetailModal: false })
+  }
+
   render() {
     const {
       oneDayLimitedMenuDateTimes,
@@ -422,11 +487,13 @@ class Reservation extends React.Component {
       selectedMenuId,
       selectedPackId,
       email,
-      menuErrorText,
       dateErrorText,
       nameErrorText,
       emailErrorText,
       isReserved,
+      isMenuChange,
+      isShowDetailModal,
+      detailMenuId,
     } = this.state
 
     let { reservableDateTimes } = this.state
@@ -460,6 +527,12 @@ class Reservation extends React.Component {
       }
     }
 
+    const selectedMenu = this.getSelectedMenu(
+      selectedMenuId || selectedMenuIdForMenus
+    )
+
+    const detailMenu = this.getSelectedMenu(detailMenuId)
+
     return (
       <Layout>
         {isReserved ? (
@@ -468,138 +541,213 @@ class Reservation extends React.Component {
           <div className={classes.wrapper}>
             <p className={classes.title}>予約</p>
             <Paper className={classes.paper} elevation={3}>
-              <div className={classes.formContainer}>
-                <p className={classes.formTitle}>メニュー</p>
-                <FormControl
-                  className={classes.FormControl}
-                  error={menuErrorText !== ""}
-                >
-                  <Select
-                    value={selectedMenuId || selectedMenuIdForMenus}
-                    onChange={this.setSelectedMenuId.bind(this)}
-                    onBlur={this.onBlurValidateMenu.bind(this)}
+              {isMenuChange ? (
+                <div>
+                  <Modal
+                    open={isShowDetailModal}
+                    onClose={this.hideMenuDetailModal.bind(this)}
                   >
-                    {this.menus.map(menu => {
-                      return (
-                        <MenuItem key={menu.id} value={menu.id}>
-                          {menu.title}
-                        </MenuItem>
-                      )
-                    })}
-                  </Select>
-                  {menuErrorText && (
-                    <FormHelperText>{menuErrorText}</FormHelperText>
-                  )}
-                </FormControl>
-              </div>
-              <div className={classes.formContainer}>
-                <p className={classes.formTitle}>
-                  希望の来店日時（予約可能日時が表示されますので、選択してください）
-                </p>
-                {reservableDateTimes.length > 0 ? (
-                  <FormControl error={dateErrorText !== ""}>
-                    <Select
-                      value={selectedDateId}
-                      onChange={this.setSelectedDateId.bind(this)}
-                      onBlur={this.onBlurValidateDate.bind(this)}
-                    >
-                      {reservableDateTimes &&
-                        reservableDateTimes.map(date => {
-                          return (
-                            <MenuItem value={date.id} key={date.id}>
-                              {moment(date.dateTime).format(
-                                "YYYY/M/D (ddd) HH:mm"
-                              )}
-                            </MenuItem>
-                          )
-                        })}
-                    </Select>
-                    {dateErrorText && (
-                      <FormHelperText>{dateErrorText}</FormHelperText>
+                    {detailMenu && (
+                      <Card className={classes.detailModal}>
+                        <CardContent>
+                          <div className={classes.detailMenuTop}>
+                            <img
+                              src={detailMenu.imgSrc}
+                              className={classes.menuImg}
+                            />
+                            <div className={classes.menuCardRightContent}>
+                              <p style={{ fontWeight: "bold" }}>
+                                {detailMenu.title}
+                              </p>
+                              <p>所要時間: {detailMenu.treatmentTime}分</p>
+                              <p className={classes.menuPrice}>
+                                ¥{detailMenu.price}
+                              </p>
+                            </div>
+                          </div>
+                          <div className={classes.detailMenuBottom}>
+                            <p className={classes.formTitle}>メニュー内容</p>
+                            <p className={classes.detailMenuDescription}>
+                              {detailMenu.description}
+                            </p>
+                            <p className={classes.detailMenuTreatmentContent}>
+                              {detailMenu.treatmentContent}
+                            </p>
+                          </div>
+                        </CardContent>
+                      </Card>
                     )}
-                  </FormControl>
-                ) : (
-                  <FormControl disabled={true}>
-                    <Select defaultValue="disabled">
-                      <MenuItem value="disabled">
-                        {this.state.reservableDateTimes.length > 0
-                          ? "限定メニューに空きがありません。申し訳ございませんが、他メニューのご予約をよろしくお願い致します。"
-                          : "現在、空席がありません。申し訳ございませんが、日を改めてのご予約をよろしくお願い致します。"}
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
-                )}
-              </div>
-              <div className={classes.formContainer}>
-                <p className={classes.formTitle}>ご予約者氏名</p>
-                <TextField
-                  error={nameErrorText !== ""}
-                  helperText={nameErrorText}
-                  onChange={this.setName.bind(this)}
-                  onBlur={this.onBlurValidateName.bind(this)}
-                />
-              </div>
-              <div className={classes.formContainer}>
-                <p className={classes.formTitle}>連絡可能なメールアドレス</p>
-                <TextField
-                  error={emailErrorText !== ""}
-                  helperText={emailErrorText}
-                  onChange={this.setEmail.bind(this)}
-                  onBlur={this.onBlurValidateEmail.bind(this)}
-                />
-              </div>
-              <div className={classes.formContainer}>
-                <p className={classes.formTitle}>オプションメニュー</p>
-                <FormGroup>
-                  {this.optionMenus.massageMenus.map(menu => {
+                  </Modal>
+                  <p className={classes.formTitle}>メニューの変更</p>
+                  {this.menus.map(menu => {
                     return (
-                      <FormControlLabel
+                      <div
                         key={menu.id}
-                        control={
-                          <Checkbox
-                            value={menu.id}
-                            onChange={this.handleChangeCheckbox.bind(this)}
-                          />
-                        }
-                        label={`${menu.title} ${menu.treatmentTime}m ¥${menu.price}`}
-                      />
+                        onClick={this.changeMenu.bind(this, menu.id)}
+                        className={classes.menuCard}
+                      >
+                        <img src={menu.imgSrc} className={classes.menuImg} />
+                        <div className={classes.menuCardRightContent}>
+                          <p style={{ fontWeight: "bold" }}>{menu.title}</p>
+                          <p>所要時間: {menu.treatmentTime}分</p>
+                          <p className={classes.menuPrice}>¥{menu.price}</p>
+                          <p
+                            onClick={this.showMenuDetailModal.bind(
+                              this,
+                              menu.id
+                            )}
+                            className={classes.menuDetail}
+                          >
+                            詳細を見る
+                          </p>
+                        </div>
+                      </div>
                     )
                   })}
-                </FormGroup>
-              </div>
-              <div className={classes.formContainer}>
-                <p className={classes.formTitle}>パックのグレードアップ</p>
-                <FormControl>
-                  <RadioGroup
-                    value={selectedPackId}
-                    onChange={this.setSelectedPackId.bind(this)}
-                  >
-                    {this.optionMenus.packs.map(p => {
-                      return (
-                        <FormControlLabel
-                          key={p.id}
-                          control={<Radio />}
-                          label={`${p.title} ¥${p.price}`}
-                          value={p.id}
-                        />
-                      )
-                    })}
-                  </RadioGroup>
-                </FormControl>
-              </div>
-              <p className={classes.totalPriceTitle}>合計金額（税抜き）:</p>
-              <p className={classes.totalPrice}>¥{this.separate(totalPrice)}</p>
-              <div className={classes.buttonWrapper}>
-                <Button
-                  onClick={this.onReservation.bind(this)}
-                  className={
-                    this.isValid() ? classes.button : classes.disabledButton
-                  }
-                  disabled={!this.isValid()}
-                >
-                  予約する
-                </Button>
-              </div>
+                </div>
+              ) : (
+                <div>
+                  <div className={classes.formContainer}>
+                    <p className={classes.formTitle}>ご予約のメニュー</p>
+                    <p
+                      className={classes.changeMenuTitle}
+                      onClick={this.setIsMenuChange.bind(this, true)}
+                    >
+                      メニューを変更する
+                    </p>
+                    <div className={classes.reservationMenu}>
+                      {selectedMenu ? (
+                        <div>
+                          <p style={{ fontWeight: "bold" }}>
+                            {selectedMenu.title}
+                          </p>
+                          <p>所要時間: {selectedMenu.treatmentTime}分</p>
+                          <p className={classes.menuPrice}>
+                            ¥{selectedMenu.price}
+                          </p>
+                        </div>
+                      ) : (
+                        <p>メニューを選択してください</p>
+                      )}
+                    </div>
+                  </div>
+                  <div className={classes.formContainer}>
+                    <p className={classes.formTitle}>
+                      希望の来店日時（予約可能日時が表示されますので、選択してください）
+                    </p>
+                    {reservableDateTimes.length > 0 ? (
+                      <FormControl error={dateErrorText !== ""}>
+                        <Select
+                          value={selectedDateId}
+                          onChange={this.setSelectedDateId.bind(this)}
+                          onBlur={this.onBlurValidateDate.bind(this)}
+                        >
+                          {reservableDateTimes &&
+                            reservableDateTimes.map(date => {
+                              return (
+                                <MenuItem value={date.id} key={date.id}>
+                                  {moment(date.dateTime).format(
+                                    "YYYY/M/D (ddd) HH:mm"
+                                  )}
+                                </MenuItem>
+                              )
+                            })}
+                        </Select>
+                        {dateErrorText && (
+                          <FormHelperText>{dateErrorText}</FormHelperText>
+                        )}
+                      </FormControl>
+                    ) : (
+                      <div>
+                        <p style={{ color: "rgba(0, 0, 0, 0.38)" }}>
+                          {this.state.reservableDateTimes.length > 0
+                            ? "限定メニューに空きがありません。申し訳ございませんが、他メニューのご予約をよろしくお願い致します。"
+                            : "現在、空席がありません。申し訳ございませんが、日を改めてのご予約をよろしくお願い致します。"}
+                        </p>
+                        <FormControl disabled={true}>
+                          <Select defaultValue="disabled">
+                            <MenuItem value="disabled" />
+                          </Select>
+                        </FormControl>
+                      </div>
+                    )}
+                  </div>
+                  <div className={classes.formContainer}>
+                    <p className={classes.formTitle}>ご予約者氏名</p>
+                    <TextField
+                      error={nameErrorText !== ""}
+                      helperText={nameErrorText}
+                      onChange={this.setName.bind(this)}
+                      onBlur={this.onBlurValidateName.bind(this)}
+                    />
+                  </div>
+                  <div className={classes.formContainer}>
+                    <p className={classes.formTitle}>
+                      連絡可能なメールアドレス
+                    </p>
+                    <TextField
+                      error={emailErrorText !== ""}
+                      helperText={emailErrorText}
+                      onChange={this.setEmail.bind(this)}
+                      onBlur={this.onBlurValidateEmail.bind(this)}
+                    />
+                  </div>
+                  <div className={classes.formContainer}>
+                    <p className={classes.formTitle}>オプションメニュー</p>
+                    <FormGroup>
+                      {this.optionMenus.massageMenus.map(menu => {
+                        return (
+                          <FormControlLabel
+                            key={menu.id}
+                            control={
+                              <Checkbox
+                                value={menu.id}
+                                onChange={this.handleChangeCheckbox.bind(this)}
+                              />
+                            }
+                            label={`${menu.title} ${menu.treatmentTime}分 ¥${menu.price}`}
+                          />
+                        )
+                      })}
+                    </FormGroup>
+                  </div>
+                  <div className={classes.formContainer}>
+                    <p className={classes.formTitle}>パックのグレードアップ</p>
+                    <FormControl>
+                      <RadioGroup
+                        value={selectedPackId}
+                        onChange={this.setSelectedPackId.bind(this)}
+                      >
+                        {this.optionMenus.packs.map(p => {
+                          return (
+                            <FormControlLabel
+                              key={p.id}
+                              control={<Radio />}
+                              label={`${p.title} ¥${p.price}`}
+                              value={p.id}
+                            />
+                          )
+                        })}
+                      </RadioGroup>
+                    </FormControl>
+                  </div>
+                  <p className={classes.totalPriceTitle}>合計金額（税抜き）:</p>
+                  <p className={classes.totalPrice}>
+                    ¥{this.separate(totalPrice)}
+                  </p>
+                  <div className={classes.buttonWrapper}>
+                    <Button
+                      onClick={this.onReservation.bind(this)}
+                      className={
+                        this.isValid() ? classes.button : classes.disabledButton
+                      }
+                      disabled={!this.isValid()}
+                    >
+                      予約する
+                    </Button>
+                  </div>
+                </div>
+              )}
             </Paper>
           </div>
         )}
@@ -632,7 +780,7 @@ const styles = theme => ({
   paper: {
     padding: "100px",
     [theme.breakpoints.down("xs")]: {
-      padding: "10px 5px",
+      padding: "20px",
     },
   },
   formContainer: {
@@ -646,8 +794,75 @@ const styles = theme => ({
   FormControl: {
     width: "100%",
   },
-  menuItem: {
-    fontSize: "1px",
+  changeMenuTitle: {
+    fontSize: "13px",
+    color: "#06c",
+    "&:hover": {
+      cursor: "pointer",
+    },
+  },
+  reservationMenu: {
+    border: "1px solid #ED7483",
+    borderRadius: "3px",
+    padding: "15px",
+    lineHeight: "30px",
+    marginTop: "20px",
+  },
+  menuCard: {
+    marginTop: "25px",
+    border: "1px solid #ED7483",
+    borderRadius: "3px",
+    padding: "25px",
+    display: "flex",
+    "&:hover": {
+      cursor: "pointer",
+    },
+  },
+  menuImg: {
+    width: "25%",
+    height: "25%",
+    [theme.breakpoints.down("xs")]: {
+      width: "30%",
+    },
+  },
+  menuCardRightContent: {
+    paddingLeft: "30px",
+    lineHeight: "30px",
+  },
+  menuPrice: {
+    color: "#ED7483",
+    fontWeight: "bold",
+    letterSpacing: "3px",
+  },
+  menuDetail: {
+    fontSize: "13px",
+    color: "#06c",
+  },
+  detailModal: {
+    position: "relative",
+    clear: "both",
+    margin: "30px auto",
+    width: "50%",
+    [theme.breakpoints.down("xs")]: {
+      width: "95%",
+    },
+  },
+  detailMenuTop: {
+    display: "flex",
+  },
+  detailMenuBottom: {
+    marginTop: "20px",
+  },
+  detailMenuDescription: {
+    lineHeight: "28px",
+    fontSize: "14px",
+    letterSpacing: "0.5px",
+    paddingBottom: "15px",
+  },
+  detailMenuTreatmentContent: {
+    lineHeight: "28px",
+    fontSize: "14px",
+    letterSpacing: "0.5px",
   },
   totalPriceTitle: {
     fontWeight: "bold",
