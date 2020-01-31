@@ -373,23 +373,6 @@ class Reservation extends React.Component {
     }
   }
 
-  onHoge() {
-    const { selectedDateId, selectedMenuId, name, email } = this.state
-    const selectedMenuIdForMenus = this.props.location.state
-      ? this.props.location.state.selectedMenuIdForMenus
-      : ""
-    const menuId = selectedMenuId || selectedMenuIdForMenus
-    const menu = this.menus.find(menu => menu.id === menuId)
-    const optionMenus = this.getSelectedOptionMenus()
-    // this.setState({ isReserved: true })
-    try {
-      this.sendMailToAdmin(name, email, menu, selectedDateId, optionMenus)
-      this.sendMailToClient(name, email, menu, selectedDateId, optionMenus)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
   getSelectedOptionMenus() {
     const massageMenus = this.optionMenus.massageMenus.filter(m => m.checked)
     const pack = this.optionMenus.packs.find(
