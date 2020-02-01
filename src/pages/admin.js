@@ -42,7 +42,7 @@ class Admin extends React.Component {
 
 const styles = {
   wrapper: {
-    padding: "70px 16px 104px",
+    padding: "0 16px",
     maxWidth: "1000px",
     maxHeight: "800px",
     margin: "0 auto",

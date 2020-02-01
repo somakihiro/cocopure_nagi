@@ -80,6 +80,7 @@ class AdminReservation extends React.Component {
         email: "",
         menu: {},
         option_menus: {},
+        isCampaign: false,
       })
       .then(() => this.getReservations())
       .catch(e => console.log(e))
@@ -151,7 +152,7 @@ class AdminReservation extends React.Component {
       deleteId,
     } = this.state
     return (
-      <div>
+      <div style={styles.wrapper}>
         {/*
         <Modal
           aria-labelledby="simple-modal-title"
@@ -265,6 +266,11 @@ class AdminReservation extends React.Component {
                       {r.option_menus.pack && r.option_menus.pack.title}
                     </p>
                   </ExpansionPanelDetails>
+                  {r.isCampaign && r.menu.campaignPrice && (
+                    <ExpansionPanelDetails>
+                      <p>キャンペーン価格:　○</p>
+                    </ExpansionPanelDetails>
+                  )}
                 </div>
               ) : (
                 <ExpansionPanelDetails>

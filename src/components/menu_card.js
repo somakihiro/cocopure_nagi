@@ -30,6 +30,10 @@ class MenuCard extends React.Component {
     const { isShowDetailModal, detailMenuId } = this.state
     const { classes, menu } = this.props
     const detailMenu = Menus.find(menu => menu.id === detailMenuId)
+    const now = new Date()
+    const campaignStartTime = new Date(2020, 1, 29)
+    const campaignEndTime = new Date(2020, 2, 31, 23, 59, 59)
+    const isCampaign = now > campaignStartTime && now < campaignEndTime
     return (
       <div>
         <Modal
@@ -47,7 +51,18 @@ class MenuCard extends React.Component {
                   <div className={classes.detailMenuCardRightContent}>
                     <p style={{ fontWeight: "bold" }}>{detailMenu.title}</p>
                     <p>所要時間: {detailMenu.treatmentTime}分</p>
-                    <p className={classes.menuPrice}>¥{detailMenu.price}</p>
+                    {isCampaign && menu.campaignPrice ? (
+                      <div>
+                        <span className={classes.beforeCampaignPrice}>
+                          ¥{detailMenu.price}
+                        </span>
+                        <span className={classes.menuPrice}>
+                          ¥{detailMenu.campaignPrice}
+                        </span>
+                      </div>
+                    ) : (
+                      <p className={classes.menuPrice}>¥{detailMenu.price}</p>
+                    )}
                   </div>
                 </div>
                 <div className={classes.detailMenuBottom}>
@@ -69,7 +84,18 @@ class MenuCard extends React.Component {
             <div className={classes.menuCardRightContent}>
               <p style={{ fontWeight: "bold" }}>{menu.title}</p>
               <p>所要時間: {menu.treatmentTime}分</p>
-              <p className={classes.menuPrice}>¥{menu.price}</p>
+              {isCampaign && menu.campaignPrice ? (
+                <div>
+                  <span className={classes.beforeCampaignPrice}>
+                    ¥{menu.price}
+                  </span>
+                  <span className={classes.menuPrice}>
+                    ¥{menu.campaignPrice}
+                  </span>
+                </div>
+              ) : (
+                <p className={classes.menuPrice}>¥{menu.price}</p>
+              )}
               <p
                 className={classes.menuDetail}
                 onClick={this.showMenuDetailModal.bind(this, menu.id)}
@@ -121,6 +147,11 @@ const styles = theme => ({
     [theme.breakpoints.down("xs")]: {
       paddingLeft: 0,
     },
+  },
+  beforeCampaignPrice: {
+    fontSize: "14px",
+    textDecoration: "line-through",
+    marginRight: "10px",
   },
   menuPrice: {
     color: "#ED7483",

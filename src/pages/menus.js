@@ -34,7 +34,7 @@ const useStyles = makeStyles({
   menusWrapper: {
     maxWidth: "1000px",
     margin: "0 auto",
-    padding: "70px 16px 104px",
+    padding: "120px 16px 104px",
   },
   category: {
     borderLeft: "solid 3px #ED7483",

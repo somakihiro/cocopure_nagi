@@ -3,6 +3,9 @@
   line-height: 60px;
   background-color: #fff;
   border-bottom: 1px groove rgba(106, 137, 152, 0.2);
+  position: fixed;
+  width: 100%;
+  z-index: 10;
 }
 
 .container {
@@ -19,4 +22,15 @@
   text-decoration: none;
   font-size: 14px;
   color: #534745;
+}
+
+.campaign-header {
+  background: #ed7483;
+  height: 50px;
+}
+
+.campaign-text {
+  color: #fff;
+  text-align: center;
+  line-height: 50px;
 }

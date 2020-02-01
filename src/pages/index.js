@@ -36,7 +36,7 @@ const useStyles = makeStyles({
     backgroundSize: "cover",
   },
   mainWrapper: {
-    padding: "70px 16px 104px",
+    padding: "120px 16px 104px",
     maxWidth: "1000px",
     maxHeight: "800px",
     margin: "0 auto",

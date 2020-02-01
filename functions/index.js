@@ -75,7 +75,11 @@ https://goo.gl/maps/kC2k4JxcByTHbNF98
 
 ・メニュー
 ${data.menu.title}
-メニュー金額:  ${data.menu.price}円（税抜き）
+メニュー金額:  ${
+    data.isCampaign && data.menu.campaignPrice
+      ? data.menu.campaignPrice
+      : data.menu.price
+  }円（税抜き）
 施術時間目安:  ${data.menu.treatmentTime}分
 
 ・オプション

@@ -27,7 +27,7 @@ const styles = theme => ({
   wrapper: {
     maxWidth: "1000px",
     margin: "0 auto",
-    padding: "70px 16px 104px",
+    padding: "120px 16px 104px",
   },
   title: {
     fontSize: "25px",

@@ -49,6 +49,7 @@ export const Menus = [
     title: "ファイシャル 美白ケアコース",
     treatmentTime: 70,
     price: "9,500",
+    campaignPrice: "6,650",
     description:
       "スタンダード 60分コースにディーポレーション美容液導入をプラスしたコースです。デコルテをしっかりとほぐしながら、クレイパック、顔マッサージで血行促進、代謝UPを促した後、美容液を導入していきます。美容機器を使い表皮・真皮層にまで美容液を浸透させ、お肌の細胞を元気にしムクミ、くすみ改善を促します。",
     treatmentContent:
@@ -61,6 +62,7 @@ export const Menus = [
     title: "ファイシャル 美白ケアコース",
     treatmentTime: 100,
     price: "13,500",
+    campaignPrice: "9,450",
     description:
       "美白ケア 70分コースに背中〜首筋マッサージをプラスし丹念に凝りをほぐす事で、血行促進、代謝UP、お肌のくすみやムクミをすっきりとさせます。 そして2種の美容機器を使い表皮・皮層にまで美容液を浸透、美白、ハリ、ツヤのあるお肌へと促します。お肌の細胞を元気にし回復力をUP、より透明感・美白効果が期待できます",
     treatmentContent:
@@ -73,6 +75,7 @@ export const Menus = [
     title: "ファイシャル EMSたるみケアコース",
     treatmentTime: 70,
     price: "9,500",
+    campaignPrice: "6,650",
     description:
       "スタンダードコースにEMSによる顔筋に働きかける表情筋トレーニングをプラスしたコースです。デコルテをしっかりとほぐしながら、クレイパック、顔マッサージで血行促進、代謝UPを促した後、EMSで表情筋にアプローチをしていきます。シワの改善、リフトアップ、フェイスラインの引き締めに効果的です。",
     treatmentContent:
@@ -85,6 +88,7 @@ export const Menus = [
     title: "ファイシャル EMSたるみケアコース",
     treatmentTime: 100,
     price: "13,500",
+    campaignPrice: "9,450",
     description:
       "EMSたるみケア 70分コースに背中〜首筋マッサージをプラスし丹念に凝りをほぐす事で、血行促進、代謝UP、お肌のくすみやムクミをすっきりとさせます。そして2種の美容機器(コラーゲンへ働きかける美容機器RF波とEMS)で首筋〜デコルテ・顔までアプローチしていきます。肩まわり、顔まわりがスッキリして私も大好きなコースです。",
     treatmentContent:
@@ -97,6 +101,7 @@ export const Menus = [
     title: "全身すっきりリンパトリートメント",
     treatmentTime: 70,
     price: "11,000",
+    campaignPrice: "7,700",
     description:
       "オールハンドのリンパオイルマッサージにより身体全体をほぐし、溜まった老廃物を流します。血行促進、こり、冷え性、疲労回復、ダイエットなどに効果的です。",
     treatmentContent:

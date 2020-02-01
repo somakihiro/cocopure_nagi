@@ -34,25 +34,26 @@ class AdminSignIn extends React.Component {
   }
 
   render() {
+    const { classes } = this.props
     return (
-      <div style={styles.wrapper}>
-        <div style={styles.container}>
-          <p style={styles.text}>Admin Sign In</p>
+      <div className={classes.wrapper}>
+        <div className={classes.container}>
+          <p className={classes.text}>Admin Sign In</p>
           <div>
             <TextField
               label="メールアドレス"
-              style={styles.textField}
+              className={classes.textField}
               onChange={this.setEmail.bind(this)}
             />
           </div>
           <div>
             <TextField
               label="パスワード"
-              style={styles.textField}
+              className={classes.textField}
               onChange={this.setPassword.bind(this)}
             />
           </div>
-          <Button style={styles.button} onClick={this.signIn.bind(this)}>
+          <Button className={classes.button} onClick={this.signIn.bind(this)}>
             ログイン
           </Button>
         </div>
@@ -61,7 +62,7 @@ class AdminSignIn extends React.Component {
   }
 }
 
-const styles = {
+const styles = theme => ({
   wrapper: {
     padding: "70px 16px 104px",
     maxWidth: "1000px",
@@ -71,6 +72,9 @@ const styles = {
   container: {
     width: "55%",
     margin: "0 auto",
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+    },
   },
   text: {
     textAlign: "center",
@@ -92,6 +96,6 @@ const styles = {
       opacity: 0.7,
     },
   },
-}
+})
 
 export default withStyles(styles)(AdminSignIn)

@@ -224,6 +224,7 @@ class Reservation extends React.Component {
         email,
         reserved_flag: true,
         option_menus: optionMenus,
+        isCampaign: this.getIsCampaign(),
       })
       .then(() => {
         this.setState({ isReserved: true })
@@ -259,6 +260,7 @@ class Reservation extends React.Component {
 
   sendMailToClient(name, email, menu, dateId, optionMenus) {
     const date = this.state.reservableDateTimes.find(d => d.id === dateId)
+    const isCampaign = this.getIsCampaign()
     const totalPrice = this.separate(this.getTotalPrice())
     try {
       const sendMailToClient = firebase
@@ -271,6 +273,7 @@ class Reservation extends React.Component {
         date: moment(date.dateTime).format("YYYY/M/D (ddd) HH:mm"),
         optionMenus,
         totalPrice,
+        isCampaign,
       })
     } catch (e) {
       console.log(e)
@@ -330,9 +333,12 @@ class Reservation extends React.Component {
     const menuId = selectedMenuId || selectedMenuIdForMenus
     if (!menuId) return 0
     const menu = Menus.find(menu => menu.id === menuId)
+    const isCampaign = this.getIsCampaign()
+    const menuPrice =
+      isCampaign && menu.campaignPrice ? menu.campaignPrice : menu.price
     const optionMenus = this.getSelectedOptionMenus()
     const priceArray = optionMenus.massageMenus.map(m => m.price)
-    priceArray.push(menu.price, optionMenus.pack.price)
+    priceArray.push(menuPrice, optionMenus.pack.price)
     const numberPriceArray = priceArray.map(p => Number(p.split(",").join("")))
     const totalPrice = numberPriceArray.reduce(
       (accumulator, currentValue) => accumulator + currentValue
@@ -365,6 +371,13 @@ class Reservation extends React.Component {
 
   hideMenuDetailModal() {
     this.setState({ isShowDetailModal: false })
+  }
+
+  getIsCampaign() {
+    const now = new Date()
+    const campaignStartTime = new Date(2020, 1, 29)
+    const campaignEndTime = new Date(2020, 2, 31, 23, 59, 59)
+    return now > campaignStartTime && now < campaignEndTime
   }
 
   render() {
@@ -420,6 +433,8 @@ class Reservation extends React.Component {
 
     const detailMenu = this.getSelectedMenu(detailMenuId)
 
+    const isCampaign = this.getIsCampaign()
+
     return (
       <Layout>
         {isReserved ? (
@@ -447,9 +462,20 @@ class Reservation extends React.Component {
                                 {detailMenu.title}
                               </p>
                               <p>所要時間: {detailMenu.treatmentTime}分</p>
-                              <p className={classes.menuPrice}>
-                                ¥{detailMenu.price}
-                              </p>
+                              {isCampaign && detailMenu.campaignPrice ? (
+                                <div>
+                                  <span className={classes.beforeCampaignPrice}>
+                                    ¥{detailMenu.price}
+                                  </span>
+                                  <span className={classes.menuPrice}>
+                                    ¥{detailMenu.campaignPrice}
+                                  </span>
+                                </div>
+                              ) : (
+                                <p className={classes.menuPrice}>
+                                  ¥{detailMenu.price}
+                                </p>
+                              )}
                             </div>
                           </div>
                           <div className={classes.detailMenuBottom}>
@@ -477,7 +503,18 @@ class Reservation extends React.Component {
                         <div className={classes.menuCardRightContent}>
                           <p style={{ fontWeight: "bold" }}>{menu.title}</p>
                           <p>所要時間: {menu.treatmentTime}分</p>
-                          <p className={classes.menuPrice}>¥{menu.price}</p>
+                          {isCampaign && menu.campaignPrice ? (
+                            <div>
+                              <span className={classes.beforeCampaignPrice}>
+                                ¥{menu.price}
+                              </span>
+                              <span className={classes.menuPrice}>
+                                ¥{menu.campaignPrice}
+                              </span>
+                            </div>
+                          ) : (
+                            <p className={classes.menuPrice}>¥{menu.price}</p>
+                          )}
                           <p
                             onClick={this.showMenuDetailModal.bind(
                               this,
@@ -509,9 +546,20 @@ class Reservation extends React.Component {
                             {selectedMenu.title}
                           </p>
                           <p>所要時間: {selectedMenu.treatmentTime}分</p>
-                          <p className={classes.menuPrice}>
-                            ¥{selectedMenu.price}
-                          </p>
+                          {isCampaign && selectedMenu.campaignPrice ? (
+                            <div>
+                              <span className={classes.beforeCampaignPrice}>
+                                ¥{selectedMenu.price}
+                              </span>
+                              <span className={classes.menuPrice}>
+                                ¥{selectedMenu.campaignPrice}
+                              </span>
+                            </div>
+                          ) : (
+                            <p className={classes.menuPrice}>
+                              ¥{selectedMenu.price}
+                            </p>
+                          )}
                         </div>
                       ) : (
                         <p>メニューを選択してください</p>
@@ -645,11 +693,11 @@ const styles = theme => ({
   wrapper: {
     maxWidth: "1000px",
     margin: "0 auto",
-    padding: "70px 16px 104px",
+    padding: "120px 16px 104px",
     [theme.breakpoints.down("xs")]: {
       maxWidth: "1000px",
       margin: "0 auto",
-      padding: "40px 15px 0",
+      padding: "100px 15px 0",
     },
   },
   title: {
@@ -713,6 +761,11 @@ const styles = theme => ({
   menuCardRightContent: {
     paddingLeft: "30px",
     lineHeight: "30px",
+  },
+  beforeCampaignPrice: {
+    fontSize: "14px",
+    textDecoration: "line-through",
+    marginRight: "10px",
   },
   menuPrice: {
     color: "#ED7483",
