@@ -172,7 +172,7 @@ class Reservation extends React.Component {
         querySnapshot.forEach(doc => {
           const document = doc.data()
           const menu = document && document.menu
-          if (menu && menu.id === 1) {
+          if (menu && menu.id === 8) {
             oneDayLimitedMenuDateTimes.push(document.date.toDate())
           }
         })
@@ -429,8 +429,8 @@ class Reservation extends React.Component {
     const totalPrice = this.getTotalPrice()
 
     if (
-      selectedMenuId === 1 ||
-      (!selectedMenuId && selectedMenuIdForMenus === 1)
+      selectedMenuId === 8 ||
+      (!selectedMenuId && selectedMenuIdForMenus === 8)
     ) {
       if (
         reservableDateTimes.length > 0 &&

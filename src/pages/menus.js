@@ -10,11 +10,6 @@ export default () => {
     <Layout>
       <div className={styles.menusWrapper}>
         <p style={{ fontSize: 25 }}>メニュー一覧</p>
-        <p className={styles.category}>1日1名様限定特別コース！</p>
-        {Menus.map(menu => {
-          if (menu.category !== "special") return
-          return <MenuCard menu={menu} />
-        })}
         <p className={styles.category}>フェイシャル</p>
         {Menus.map(menu => {
           if (menu.category !== "facial") return
@@ -23,6 +18,11 @@ export default () => {
         <p className={styles.category}>ボディ</p>
         {Menus.map(menu => {
           if (menu.category !== "body") return
+          return <MenuCard menu={menu} />
+        })}
+        <p className={styles.category}>1日1名様限定特別コース</p>
+        {Menus.map(menu => {
+          if (menu.category !== "special") return
           return <MenuCard menu={menu} />
         })}
       </div>
