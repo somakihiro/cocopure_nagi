@@ -78,6 +78,7 @@ class AdminReservation extends React.Component {
         reserved_flag: false,
         name: "",
         email: "",
+        address: "",
         menu: {},
         option_menus: {},
         isCampaign: false,
@@ -93,8 +94,10 @@ class AdminReservation extends React.Component {
         reserved_flag: false,
         name: "",
         email: "",
+        address: "",
         menu: {},
         option_menus: {},
+        isCampaign: false,
       })
       .then(() => {
         this.getReservations()
@@ -242,6 +245,9 @@ class AdminReservation extends React.Component {
                   </ExpansionPanelDetails>
                   <ExpansionPanelDetails>
                     <p>メールアドレス:　{r.email}</p>
+                  </ExpansionPanelDetails>
+                  <ExpansionPanelDetails>
+                    <p>住所:　{r.address}</p>
                   </ExpansionPanelDetails>
                   <ExpansionPanelDetails>
                     <p>

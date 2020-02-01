@@ -36,9 +36,11 @@ class Reservation extends React.Component {
       selectedPackId: 1,
       name: "",
       email: "",
+      address: "",
       dateErrorText: "",
       nameErrorText: "",
       emailErrorText: "",
+      addressErrorText: "",
       isReserved: false,
       checked: false,
       isMenuChange: false,
@@ -199,6 +201,10 @@ class Reservation extends React.Component {
     this.setState({ email: event.target.value })
   }
 
+  setAddress(event) {
+    this.setState({ address: event.target.value })
+  }
+
   handleChangeCheckbox(event) {
     const menu = this.optionMenus.massageMenus.find(
       menu => menu.id === Number(event.target.value)
@@ -208,7 +214,7 @@ class Reservation extends React.Component {
   }
 
   onReservation() {
-    const { selectedDateId, selectedMenuId, name, email } = this.state
+    const { selectedDateId, selectedMenuId, name, email, address } = this.state
     const selectedMenuIdForMenus = this.props.location.state
       ? this.props.location.state.selectedMenuIdForMenus
       : ""
@@ -222,6 +228,7 @@ class Reservation extends React.Component {
         menu,
         name,
         email,
+        address,
         reserved_flag: true,
         option_menus: optionMenus,
         isCampaign: this.getIsCampaign(),
@@ -229,7 +236,14 @@ class Reservation extends React.Component {
       .then(() => {
         this.setState({ isReserved: true })
         try {
-          this.sendMailToAdmin(name, email, menu, selectedDateId, optionMenus)
+          this.sendMailToAdmin(
+            name,
+            email,
+            address,
+            menu,
+            selectedDateId,
+            optionMenus
+          )
           this.sendMailToClient(name, email, menu, selectedDateId, optionMenus)
         } catch (e) {
           console.log(e)
@@ -240,7 +254,7 @@ class Reservation extends React.Component {
       })
   }
 
-  sendMailToAdmin(name, email, menu, dateId, optionMenus) {
+  sendMailToAdmin(name, email, address, menu, dateId, optionMenus) {
     const date = this.state.reservableDateTimes.find(d => d.id === dateId)
     try {
       const sendMailToAdmin = firebase
@@ -249,6 +263,7 @@ class Reservation extends React.Component {
       sendMailToAdmin({
         name,
         email,
+        address,
         menu,
         date: moment(date.dateTime).format("YYYY/M/D (ddd) HH:mm"),
         optionMenus,
@@ -325,6 +340,12 @@ class Reservation extends React.Component {
     this.setState({ emailErrorText })
   }
 
+  onBlurValidateAddress(event) {
+    const address = event.target.value
+    const addressErrorText = address.match(/\S/) ? "" : "入力してください"
+    this.setState({ addressErrorText })
+  }
+
   getTotalPrice() {
     const { selectedMenuId } = this.state
     const selectedMenuIdForMenus = this.props.location.state
@@ -390,6 +411,7 @@ class Reservation extends React.Component {
       dateErrorText,
       nameErrorText,
       emailErrorText,
+      addressErrorText,
       isReserved,
       isMenuChange,
       isShowDetailModal,
@@ -626,6 +648,16 @@ class Reservation extends React.Component {
                     />
                   </div>
                   <div className={classes.formContainer}>
+                    <p className={classes.formTitle}>住所</p>
+                    <TextField
+                      error={addressErrorText !== ""}
+                      helperText={addressErrorText}
+                      onChange={this.setAddress.bind(this)}
+                      onBlur={this.onBlurValidateAddress.bind(this)}
+                      className={classes.addressTextField}
+                    />
+                  </div>
+                  <div className={classes.formContainer}>
                     <p className={classes.formTitle}>オプションメニュー</p>
                     <FormGroup>
                       {this.optionMenus.massageMenus.map(menu => {
@@ -801,6 +833,12 @@ const styles = theme => ({
     lineHeight: "28px",
     fontSize: "14px",
     letterSpacing: "0.5px",
+  },
+  addressTextField: {
+    width: "50%",
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+    },
   },
   totalPriceTitle: {
     fontWeight: "bold",

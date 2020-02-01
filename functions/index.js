@@ -22,6 +22,9 @@ ${data.name}
 ・メールアドレス
 ${data.email}
 
+・住所
+${data.address}
+
 ・メニュー
 ${data.menu.title} 施術時間:  ${data.menu.treatmentTime}分
 
@@ -61,17 +64,12 @@ const clientContents = data => {
 
 ご予約が確定しました。
 下記の内容をご確認いただき、そのまま予約の日時にご来店ください。
+住所につきましては、追ってご連絡させていただきます。
 ※不明な点がございましたら、本メールにご返信ください。
 ※ご予約をキャンセルされる場合にも、本メールにご返信ください。
 
 ・来店日時
 ${data.date}
-
-・住所
-東京都大田区仲六郷1-10-1 イーストハイム仲六郷920
-
-・地図
-https://goo.gl/maps/kC2k4JxcByTHbNF98
 
 ・メニュー
 ${data.menu.title}
