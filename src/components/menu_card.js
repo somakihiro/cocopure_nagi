@@ -51,7 +51,7 @@ class MenuCard extends React.Component {
                   <div className={classes.detailMenuCardRightContent}>
                     <p style={{ fontWeight: "bold" }}>{detailMenu.title}</p>
                     <p>所要時間: {detailMenu.treatmentTime}分</p>
-                    {isCampaign && menu.campaignPrice ? (
+                    {isCampaign && detailMenu.campaignPrice ? (
                       <div>
                         <span className={classes.beforeCampaignPrice}>
                           ¥{detailMenu.price}
@@ -61,7 +61,14 @@ class MenuCard extends React.Component {
                         </span>
                       </div>
                     ) : (
-                      <p className={classes.menuPrice}>¥{detailMenu.price}</p>
+                      <div>
+                        <p className={classes.menuPrice}>¥{detailMenu.price}</p>
+                        {detailMenu.campaignPrice && (
+                          <p className={classes.menuPrice}>
+                            初回限定価格: ¥{detailMenu.campaignPrice}
+                          </p>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>
@@ -94,7 +101,14 @@ class MenuCard extends React.Component {
                   </span>
                 </div>
               ) : (
-                <p className={classes.menuPrice}>¥{menu.price}</p>
+                <div>
+                  <p className={classes.menuPrice}>¥{menu.price}</p>
+                  {menu.campaignPrice && (
+                    <p className={classes.menuPrice}>
+                      初回限定価格: ¥{menu.campaignPrice}
+                    </p>
+                  )}
+                </div>
               )}
               <p
                 className={classes.menuDetail}

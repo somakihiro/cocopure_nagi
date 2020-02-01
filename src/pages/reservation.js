@@ -46,6 +46,7 @@ class Reservation extends React.Component {
       isMenuChange: false,
       isShowDetailModal: false,
       detailMenuId: "",
+      isFirstVisit: "false",
     }
 
     this.optionMenus = {
@@ -289,6 +290,7 @@ class Reservation extends React.Component {
         optionMenus,
         totalPrice,
         isCampaign,
+        isFirstVisit: this.state.isFirstVisit,
       })
     } catch (e) {
       console.log(e)
@@ -304,7 +306,7 @@ class Reservation extends React.Component {
   }
 
   isValid() {
-    const { selectedDateId, selectedMenuId, name, email } = this.state
+    const { selectedDateId, selectedMenuId, name, email, address } = this.state
     const selectedMenuIdForMenus = this.props.location.state
       ? this.props.location.state.selectedMenuIdForMenus
       : ""
@@ -313,6 +315,7 @@ class Reservation extends React.Component {
       selectedDateId !== "" &&
         (selectedMenuId !== "" || selectedMenuIdForMenus !== "") &&
         name.match(/\S/) &&
+        address.match(/\S/) &&
         email.match(emailFormat)
     )
   }
@@ -347,7 +350,7 @@ class Reservation extends React.Component {
   }
 
   getTotalPrice() {
-    const { selectedMenuId } = this.state
+    const { selectedMenuId, isFirstVisit } = this.state
     const selectedMenuIdForMenus = this.props.location.state
       ? this.props.location.state.selectedMenuIdForMenus
       : ""
@@ -356,7 +359,9 @@ class Reservation extends React.Component {
     const menu = Menus.find(menu => menu.id === menuId)
     const isCampaign = this.getIsCampaign()
     const menuPrice =
-      isCampaign && menu.campaignPrice ? menu.campaignPrice : menu.price
+      (isCampaign || isFirstVisit === "true") && menu.campaignPrice
+        ? menu.campaignPrice
+        : menu.price
     const optionMenus = this.getSelectedOptionMenus()
     const priceArray = optionMenus.massageMenus.map(m => m.price)
     priceArray.push(menuPrice, optionMenus.pack.price)
@@ -401,6 +406,10 @@ class Reservation extends React.Component {
     return now > campaignStartTime && now < campaignEndTime
   }
 
+  setIsFirstVisit(event) {
+    this.setState({ isFirstVisit: event.target.value })
+  }
+
   render() {
     const {
       oneDayLimitedMenuDateTimes,
@@ -416,6 +425,7 @@ class Reservation extends React.Component {
       isMenuChange,
       isShowDetailModal,
       detailMenuId,
+      isFirstVisit,
     } = this.state
 
     let { reservableDateTimes } = this.state
@@ -494,9 +504,16 @@ class Reservation extends React.Component {
                                   </span>
                                 </div>
                               ) : (
-                                <p className={classes.menuPrice}>
-                                  ¥{detailMenu.price}
-                                </p>
+                                <div>
+                                  <p className={classes.menuPrice}>
+                                    ¥{detailMenu.price}
+                                  </p>
+                                  {detailMenu.campaignPrice && (
+                                    <p className={classes.menuPrice}>
+                                      初回限定価格: ¥{detailMenu.campaignPrice}
+                                    </p>
+                                  )}
+                                </div>
                               )}
                             </div>
                           </div>
@@ -535,7 +552,14 @@ class Reservation extends React.Component {
                               </span>
                             </div>
                           ) : (
-                            <p className={classes.menuPrice}>¥{menu.price}</p>
+                            <div>
+                              <p className={classes.menuPrice}>¥{menu.price}</p>
+                              {menu.campaignPrice && (
+                                <p className={classes.menuPrice}>
+                                  初回限定価格: ¥{menu.campaignPrice}
+                                </p>
+                              )}
+                            </div>
                           )}
                           <p
                             onClick={this.showMenuDetailModal.bind(
@@ -578,9 +602,16 @@ class Reservation extends React.Component {
                               </span>
                             </div>
                           ) : (
-                            <p className={classes.menuPrice}>
-                              ¥{selectedMenu.price}
-                            </p>
+                            <div>
+                              <p className={classes.menuPrice}>
+                                ¥{selectedMenu.price}
+                              </p>
+                              {selectedMenu.campaignPrice && (
+                                <p className={classes.menuPrice}>
+                                  初回限定価格: ¥{selectedMenu.campaignPrice}
+                                </p>
+                              )}
+                            </div>
                           )}
                         </div>
                       ) : (
@@ -693,6 +724,28 @@ class Reservation extends React.Component {
                             />
                           )
                         })}
+                      </RadioGroup>
+                    </FormControl>
+                  </div>
+                  <div className={classes.formContainer}>
+                    <p className={classes.formTitle}>
+                      ご利用は初めてでしょうか？
+                    </p>
+                    <FormControl>
+                      <RadioGroup
+                        value={isFirstVisit}
+                        onChange={this.setIsFirstVisit.bind(this)}
+                      >
+                        <FormControlLabel
+                          control={<Radio />}
+                          label="いいえ"
+                          value="false"
+                        />
+                        <FormControlLabel
+                          control={<Radio />}
+                          label="はい"
+                          value="true"
+                        />
                       </RadioGroup>
                     </FormControl>
                   </div>

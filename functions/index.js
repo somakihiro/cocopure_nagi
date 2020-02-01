@@ -74,7 +74,7 @@ ${data.date}
 ・メニュー
 ${data.menu.title}
 メニュー金額:  ${
-    data.isCampaign && data.menu.campaignPrice
+    (data.isCampaign || data.isFirstVisit) && data.menu.campaignPrice
       ? data.menu.campaignPrice
       : data.menu.price
   }円（税抜き）

@@ -34,12 +34,18 @@ class AdminReservation extends React.Component {
   }
 
   componentDidMount() {
-    this.getReservations()
+    this.initFetch()
   }
 
-  getReservations() {
+  async initFetch() {
+    await this.getReservations()
+    await this.setIsFirstVisit()
+  }
+
+  async getReservations() {
     const reservations = []
-    db.collection("reservations")
+    await db
+      .collection("reservations")
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
@@ -55,12 +61,35 @@ class AdminReservation extends React.Component {
           }
         })
       })
-      .then(res =>
+      .then(res => {
         this.setState({
           reservations: _.sortBy(reservations, r => r.date),
         })
-      )
+      })
       .catch(e => console.log(e))
+  }
+
+  async setIsFirstVisit() {
+    const newReservations = await Promise.all(
+      this.state.reservations.map(async r => {
+        if (!r.reserved_flag) return r
+        return await db
+          .collection("reservations")
+          .where("email", "==", r.email)
+          .get()
+          .then(querySnapshot => {
+            if (querySnapshot.size > 1) {
+              r.isFirstVisit = false
+              return r
+            } else {
+              r.isFirstVisit = true
+              return r
+            }
+          })
+          .catch(error => console.log(error))
+      })
+    )
+    this.setState({ reservations: newReservations })
   }
 
   handleChange(panel, _event, isExpanded) {
@@ -277,6 +306,9 @@ class AdminReservation extends React.Component {
                       <p>キャンペーン価格:　○</p>
                     </ExpansionPanelDetails>
                   )}
+                  <ExpansionPanelDetails>
+                    <p>初来店: {r.isFirstVisit ? "○" : "×"}</p>
+                  </ExpansionPanelDetails>
                 </div>
               ) : (
                 <ExpansionPanelDetails>
