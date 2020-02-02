@@ -186,11 +186,11 @@ const styles = theme => ({
     fontSize: "14px",
     color: "#534745",
     [theme.breakpoints.down("xs")]: {
-      color: "#ed7483",
+      color: "#F3ABB3",
     },
   },
   campaignHeader: {
-    background: "#ed7483",
+    background: "#F3ABB3",
     height: "50px",
   },
   campaignText: {

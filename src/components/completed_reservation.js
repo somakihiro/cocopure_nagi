@@ -31,7 +31,7 @@ const styles = theme => ({
   },
   title: {
     fontSize: "25px",
-    color: "#ED7483",
+    color: "#F3ABB3",
     marginBottom: "25px",
   },
   content: {
@@ -41,13 +41,13 @@ const styles = theme => ({
     textDecoration: "none",
   },
   button: {
-    background: "#ED7483",
+    background: "#F3ABB3",
     color: "white",
     height: 48,
     padding: "0 30px",
     marginTop: "25px",
     "&:hover": {
-      background: "#ED7483",
+      background: "#F3ABB3",
       opacity: 0.7,
     },
     [theme.breakpoints.down("xs")]: {

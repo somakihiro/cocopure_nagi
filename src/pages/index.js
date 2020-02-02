@@ -100,13 +100,13 @@ const styles = theme => ({
     },
   },
   button: {
-    background: "#ED7483",
+    background: "#F3ABB3",
     color: "white",
     height: 55,
     padding: "0 30px",
     width: "35%",
     "&:hover": {
-      background: "#ED7483",
+      background: "#F3ABB3",
       opacity: 0.7,
     },
     [theme.breakpoints.down("xs")]: {

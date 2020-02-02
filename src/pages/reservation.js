@@ -811,7 +811,7 @@ const styles = theme => ({
   },
   formTitle: {
     marginBottom: "15px",
-    borderLeft: "3px solid #ED7483",
+    borderLeft: "3px solid #F3ABB3",
     padding: "5px 10px",
   },
   FormControl: {
@@ -825,7 +825,7 @@ const styles = theme => ({
     },
   },
   reservationMenu: {
-    border: "1px solid #ED7483",
+    border: "1px solid #F3ABB3",
     borderRadius: "3px",
     padding: "15px",
     lineHeight: "30px",
@@ -833,7 +833,7 @@ const styles = theme => ({
   },
   menuCard: {
     marginTop: "25px",
-    border: "1px solid #ED7483",
+    border: "1px solid #F3ABB3",
     borderRadius: "3px",
     padding: "25px",
     display: "flex",
@@ -858,7 +858,7 @@ const styles = theme => ({
     marginRight: "10px",
   },
   menuPrice: {
-    color: "#ED7483",
+    color: "#F3ABB3",
     fontWeight: "bold",
     letterSpacing: "3px",
   },
@@ -909,7 +909,7 @@ const styles = theme => ({
   },
   totalPrice: {
     display: "inline-block",
-    color: "#ED7483",
+    color: "#F3ABB3",
     fontWeight: "bold",
     letterSpacing: "3px",
   },
@@ -917,14 +917,14 @@ const styles = theme => ({
     marginTop: "20px",
   },
   button: {
-    background: "#ED7483",
+    background: "#F3ABB3",
     color: "white",
     height: 48,
     padding: "0 30px",
     diplay: "block",
     marginTop: "20px",
     "&:hover": {
-      background: "#ED7483",
+      background: "#F3ABB3",
       opacity: 0.7,
     },
     [theme.breakpoints.down("xs")]: {

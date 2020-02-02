@@ -37,7 +37,7 @@ const useStyles = makeStyles({
     padding: "120px 16px 104px",
   },
   category: {
-    borderLeft: "solid 3px #ED7483",
+    borderLeft: "solid 3px #F3ABB3",
     padding: 10,
     marginTop: 40,
     fontSize: 20,
@@ -70,12 +70,12 @@ const useStyles = makeStyles({
     margin: 10,
   },
   button: {
-    background: "#ED7483",
+    background: "#F3ABB3",
     color: "white",
     height: 48,
     padding: "0 30px",
     "&:hover": {
-      background: "#ED7483",
+      background: "#F3ABB3",
       opacity: 0.7,
     },
   },

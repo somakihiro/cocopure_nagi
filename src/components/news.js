@@ -152,7 +152,7 @@ const styles = theme => ({
   title: {
     fontSize: "30px",
     marginBottom: "30px",
-    borderLeft: "solid 3px #ED7483",
+    borderLeft: "solid 3px #F3ABB3",
     paddingLeft: "16px",
   },
   newsContainer: {
@@ -235,13 +235,13 @@ const styles = theme => ({
     marginTop: "25px",
   },
   button: {
-    background: "#ED7483",
+    background: "#F3ABB3",
     color: "white",
     height: 48,
     padding: "0 30px",
     width: "20%",
     "&:hover": {
-      background: "#ED7483",
+      background: "#F3ABB3",
       opacity: 0.7,
     },
     [theme.breakpoints.down("xs")]: {
