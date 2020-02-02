@@ -54,7 +54,7 @@ class News extends React.Component {
         <div>
           {loading ? (
             skeletons.map(s => (
-              <div className={classes.newsContainer}>
+              <div key={s} className={classes.newsContainer}>
                 <div className={{ display: "flex" }}>
                   <Skeleton variant="rect" className={classes.skeletonImage} />
                   <div className={classes.textContainer}>
