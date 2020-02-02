@@ -46,22 +46,38 @@ class News extends React.Component {
 
   render() {
     const { news, loading } = this.state
+    const { classes } = this.props
     const skeletons = [1, 2]
     return (
-      <div style={styles.newsWrapper}>
-        <p style={styles.title}>News</p>
+      <div className={classes.newsWrapper}>
+        <p className={classes.title}>News</p>
         <div>
           {loading ? (
             skeletons.map(s => (
-              <div style={styles.newsContainer}>
-                <div style={{ display: "flex" }}>
-                  <Skeleton variant="rect" style={styles.skeletonImage} />
-                  <div style={styles.textContainer}>
-                    <Skeleton variant="text" style={styles.skeletonNewsTitle} />
-                    <Skeleton variant="text" style={styles.skeletonContent} />
-                    <Skeleton variant="text" style={styles.skeletonContent} />
-                    <Skeleton variant="text" style={styles.skeletonContent} />
-                    <Skeleton variant="text" style={styles.skeletonContent} />
+              <div className={classes.newsContainer}>
+                <div className={{ display: "flex" }}>
+                  <Skeleton variant="rect" className={classes.skeletonImage} />
+                  <div className={classes.textContainer}>
+                    <Skeleton
+                      variant="text"
+                      className={classes.skeletonNewsTitle}
+                    />
+                    <Skeleton
+                      variant="text"
+                      className={classes.skeletonContent}
+                    />
+                    <Skeleton
+                      variant="text"
+                      className={classes.skeletonContent}
+                    />
+                    <Skeleton
+                      variant="text"
+                      className={classes.skeletonContent}
+                    />
+                    <Skeleton
+                      variant="text"
+                      className={classes.skeletonContent}
+                    />
                   </div>
                 </div>
               </div>
@@ -70,57 +86,57 @@ class News extends React.Component {
             <div>
               {news.map(n => {
                 return (
-                  <div key={n.title} style={styles.newsContainer}>
+                  <div key={n.title} className={classes.newsContainer}>
                     <a
                       href={n.link}
-                      style={styles.link}
+                      className={classes.link}
                       rel="noopener noreferrer"
                       target="_blank"
                     >
                       {n.imgSrc && (
-                        <img style={styles.image} src={n.imgSrc} alt="" />
+                        <img className={classes.image} src={n.imgSrc} alt="" />
                       )}
-                      <div style={n.imgSrc ? styles.textContainer : {}}>
+                      <div className={n.imgSrc ? classes.textContainer : {}}>
                         <p
-                          style={
+                          className={
                             n.imgSrc
-                              ? styles.newsTitle
-                              : styles.noImageNewsTitle
+                              ? classes.newsTitle
+                              : classes.noImageNewsTitle
                           }
                         >
                           {n.title}
                         </p>
                         <p
-                          style={
-                            n.imgSrc ? styles.pubDate : styles.noImagePubDate
+                          className={
+                            n.imgSrc ? classes.pubDate : classes.noImagePubDate
                           }
                         >
                           {n.pubDate}
                         </p>
-                        <p style={styles.content}>{n.content}</p>
+                        <p className={classes.content}>{n.content}</p>
                       </div>
                     </a>
                   </div>
                 )
               })}
-              <div style={styles.buttonWrapper}>
+              <div className={classes.buttonWrapper}>
                 <a
                   href="https://note.com/cocopure_nagi"
                   rel="noopener noreferrer"
                   target="_blank"
                   style={{ textDecoration: "none" }}
                 >
-                  <Button style={styles.button}>もっと見る</Button>
+                  <Button className={classes.button}>もっと見る</Button>
                 </a>
               </div>
             </div>
           ) : (
-            <div style={styles.noNewsContainer}>
+            <div className={classes.noNewsContainer}>
               <DescriptionIcon
                 color="disabled"
-                style={styles.descriptionIcon}
+                className={classes.descriptionIcon}
               />
-              <p style={styles.noNewsText}>まだNewsはありません</p>
+              <p className={classes.noNewsText}>まだNewsはありません</p>
             </div>
           )}
         </div>
@@ -129,14 +145,14 @@ class News extends React.Component {
   }
 }
 
-const styles = {
+const styles = theme => ({
   newsWrapper: {
     marginTop: "50px",
   },
   title: {
     fontSize: "30px",
     marginBottom: "30px",
-    borderLeft: "solid 3px #0bc8b6",
+    borderLeft: "solid 3px #ED7483",
     paddingLeft: "16px",
   },
   newsContainer: {
@@ -146,21 +162,38 @@ const styles = {
   link: {
     display: "flex",
     textDecoration: "none",
+    [theme.breakpoints.down("xs")]: {
+      display: "block",
+    },
   },
   image: {
     width: "25%",
     display: "inline-block",
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+      display: "block",
+    },
   },
   skeletonImage: {
     width: "25%",
     display: "inline-block",
     height: "140px",
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+      display: "block",
+      height: "120px",
+    },
   },
   textContainer: {
     display: "inline-block",
     width: "70%",
     lineHeight: "45px",
     paddingLeft: "35px",
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+      display: "block",
+      paddingLeft: 0,
+    },
   },
   newsTitle: {
     fontSize: "17px",
@@ -202,14 +235,17 @@ const styles = {
     marginTop: "25px",
   },
   button: {
-    background: "#42c7c1",
+    background: "#ED7483",
     color: "white",
     height: 48,
     padding: "0 30px",
     width: "20%",
     "&:hover": {
-      background: "#42c7c1",
+      background: "#ED7483",
       opacity: 0.7,
+    },
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
     },
   },
   circularProgressWrapper: {
@@ -228,6 +264,6 @@ const styles = {
     fontSize: "17px",
     color: "#a8abb1",
   },
-}
+})
 
 export default withStyles(styles)(News)
