@@ -10,7 +10,7 @@ export default props => {
           <Link to="/">HOME</Link>
         </div>
         <div className={`link`}>
-          <Link to="/">SALON</Link>
+          <Link to="/about">ABOUT</Link>
         </div>
         <div className={`link`}>
           <Link to="/menus">MENU</Link>
@@ -24,7 +24,7 @@ export default props => {
             rel="noopener noreferrer"
             target="_blank"
           >
-            News
+            NEWS
           </a>
         </div>
       </div>

@@ -9,7 +9,7 @@ export default () => {
   return (
     <Layout>
       <div className={styles.menusWrapper}>
-        <p style={{ fontSize: 25 }}>メニュー一覧</p>
+        <p style={{ fontSize: 25 }}>MENU</p>
         <p className={styles.category}>フェイシャル</p>
         {Menus.map(menu => {
           if (menu.category !== "facial") return
