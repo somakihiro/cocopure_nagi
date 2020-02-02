@@ -43,7 +43,7 @@ class MenuCard extends React.Component {
         >
           {detailMenu && (
             <Card className={classes.detailModal}>
-              <CardContent>
+              <CardContent className={classes.detailCardContent}>
                 <CloseIcon
                   className={classes.closeIcon}
                   onClick={this.hideMenuDetailModal.bind(this)}
@@ -183,6 +183,10 @@ const styles = theme => ({
     "&:hover": {
       cursor: "pointer",
     },
+  },
+  detailCardContent: {
+    maxHeight: "500px",
+    overflow: "scroll",
   },
   cardAction: {
     width: "33%",

@@ -484,7 +484,7 @@ class Reservation extends React.Component {
                   >
                     {detailMenu && (
                       <Card className={classes.detailModal}>
-                        <CardContent>
+                        <CardContent className={classes.detailCardContent}>
                           <CloseIcon
                             className={classes.closeIcon}
                             onClick={this.hideMenuDetailModal.bind(this)}
@@ -874,6 +874,10 @@ const styles = theme => ({
     [theme.breakpoints.down("xs")]: {
       width: "95%",
     },
+  },
+  detailCardContent: {
+    maxHeight: "500px",
+    overflow: "scroll",
   },
   closeIcon: {
     float: "right",
