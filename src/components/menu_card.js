@@ -6,6 +6,7 @@ import CardContent from "@material-ui/core/CardContent"
 import CardMedia from "@material-ui/core/CardMedia"
 import Button from "@material-ui/core/Button"
 import Modal from "@material-ui/core/Modal"
+import CloseIcon from "@material-ui/icons/Close"
 import { withStyles } from "@material-ui/core/styles"
 import { Menus } from "../constants/app"
 
@@ -43,6 +44,10 @@ class MenuCard extends React.Component {
           {detailMenu && (
             <Card className={classes.detailModal}>
               <CardContent>
+                <CloseIcon
+                  className={classes.closeIcon}
+                  onClick={this.hideMenuDetailModal.bind(this)}
+                />
                 <div className={classes.detailMenuTop}>
                   <img
                     src={detailMenu.imgSrc}
@@ -168,7 +173,7 @@ const styles = theme => ({
     marginRight: "10px",
   },
   menuPrice: {
-    color: "#ED7483",
+    color: "#F3ABB3",
     fontWeight: "bold",
     letterSpacing: "3px",
   },
@@ -187,12 +192,12 @@ const styles = theme => ({
     },
   },
   button: {
-    background: "#ED7483",
+    background: "#F3ABB3",
     color: "white",
     height: 48,
     padding: "0 30px",
     "&:hover": {
-      background: "#ED7483",
+      background: "#F3ABB3",
       opacity: 0.7,
     },
     [theme.breakpoints.down("xs")]: {
@@ -211,6 +216,10 @@ const styles = theme => ({
     [theme.breakpoints.down("xs")]: {
       width: "95%",
     },
+  },
+  closeIcon: {
+    float: "right",
+    cursor: "pointer",
   },
   detailMenuTop: {
     display: "flex",
@@ -231,7 +240,7 @@ const styles = theme => ({
   },
   detailMenuBottomTitle: {
     marginBottom: "15px",
-    borderLeft: "3px solid #ED7483",
+    borderLeft: "3px solid #F3ABB3",
     padding: "5px 10px",
   },
   detailMenuDescription: {

@@ -14,6 +14,7 @@ import Paper from "@material-ui/core/Paper"
 import Modal from "@material-ui/core/Modal"
 import Card from "@material-ui/core/Card"
 import CardContent from "@material-ui/core/CardContent"
+import CloseIcon from "@material-ui/icons/Close"
 import { withStyles } from "@material-ui/core/styles"
 import moment from "moment"
 import "moment/locale/ja"
@@ -484,6 +485,10 @@ class Reservation extends React.Component {
                     {detailMenu && (
                       <Card className={classes.detailModal}>
                         <CardContent>
+                          <CloseIcon
+                            className={classes.closeIcon}
+                            onClick={this.hideMenuDetailModal.bind(this)}
+                          />
                           <div className={classes.detailMenuTop}>
                             <img
                               src={detailMenu.imgSrc}
@@ -782,12 +787,12 @@ const styles = theme => ({
     [theme.breakpoints.down("xs")]: {
       maxWidth: "1000px",
       margin: "0 auto",
-      padding: "100px 15px 0",
+      padding: "100px 15px 104",
     },
   },
   title: {
     fontSize: "30px",
-    color: "#ED7483",
+    color: "#F3ABB3",
     marginBottom: "55px",
     textAlign: "center",
     [theme.breakpoints.down("xs")]: {
@@ -869,6 +874,10 @@ const styles = theme => ({
     [theme.breakpoints.down("xs")]: {
       width: "95%",
     },
+  },
+  closeIcon: {
+    float: "right",
+    cursor: "pointer",
   },
   detailMenuTop: {
     display: "flex",
