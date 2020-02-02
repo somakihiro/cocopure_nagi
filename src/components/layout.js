@@ -1,6 +1,7 @@
 import React from "react"
 import "../styles/layout.css"
 import Header from "./header"
+import Footer from "./footer"
 
 export default ({ children }) => {
   const now = new Date()
@@ -23,6 +24,7 @@ export default ({ children }) => {
       <div style={isCampaign || isCommingSoon ? { paddingTop: "50px" } : {}}>
         {children}
       </div>
+      <Footer />
     </div>
   )
 }

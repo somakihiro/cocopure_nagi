@@ -87,7 +87,6 @@ const styles = theme => ({
   mainWrapper: {
     padding: "50px 16px 104px",
     maxWidth: "1000px",
-    maxHeight: "800px",
     margin: "0 auto",
     [theme.breakpoints.down("xs")]: {
       padding: "50px 30px 104px",

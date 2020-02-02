@@ -35,7 +35,9 @@ class Header extends React.Component {
       <div className={classes.header}>
         {width === "xs" ? (
           <div className={classes.mobileContainer}>
-            <p style={{ fontWeight: "bold" }}>COCOPURE</p>
+            <Link to="/" className={classes.link}>
+              COCOPURE
+            </Link>
             <IconButton
               className={classes.iconButton}
               onClick={this.toggleDrawer.bind(this, true)}
