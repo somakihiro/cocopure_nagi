@@ -28,13 +28,12 @@ export default props => {
           </a>
         </div>
       </div>
-      {props.isCampaign && (
-        <div className={`campaign-header`}>
-          <p className={`campaign-text`}>
-            開店キャンペーン実施中！ 2/29(土) ー 3/31(火)
-          </p>
-        </div>
-      )}
+      {props.isCampaign ||
+        (props.isCommingSoon && (
+          <div className={`campaign-header`}>
+            <p className={`campaign-text`}>{props.bannerContent}</p>
+          </div>
+        ))}
     </div>
   )
 }
