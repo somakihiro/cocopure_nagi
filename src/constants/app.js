@@ -10,7 +10,7 @@ import bodyImg from "../images/body.jpg"
 export const Menus = [
   {
     id: 1,
-    title: "ファイシャル 美白ケアコース",
+    title: "フェイシャル 美白ケアコース",
     treatmentTime: 70,
     price: "9,500",
     campaignPrice: "6,650",
@@ -23,7 +23,7 @@ export const Menus = [
   },
   {
     id: 2,
-    title: "ファイシャル 美白ケアコース",
+    title: "フェイシャル 美白ケアコース",
     treatmentTime: 100,
     price: "13,500",
     campaignPrice: "9,450",
@@ -36,7 +36,7 @@ export const Menus = [
   },
   {
     id: 3,
-    title: "ファイシャル EMSたるみケアコース",
+    title: "フェイシャル EMSたるみケアコース",
     treatmentTime: 70,
     price: "9,500",
     campaignPrice: "6,650",
@@ -49,7 +49,7 @@ export const Menus = [
   },
   {
     id: 4,
-    title: "ファイシャル EMSたるみケアコース",
+    title: "フェイシャル EMSたるみケアコース",
     treatmentTime: 100,
     price: "13,500",
     campaignPrice: "9,450",
@@ -62,7 +62,7 @@ export const Menus = [
   },
   {
     id: 5,
-    title: "ファイシャル スタンダードコース",
+    title: "フェイシャル スタンダードコース",
     treatmentTime: 45,
     price: "5,500",
     description:
@@ -74,7 +74,7 @@ export const Menus = [
   },
   {
     id: 6,
-    title: "ファイシャル スタンダードコース",
+    title: "フェイシャル スタンダードコース",
     treatmentTime: 60,
     price: "7,500",
     description:
