@@ -129,12 +129,11 @@ class Header extends React.Component {
             </div>
           </div>
         )}
-        {isCampaign ||
-          (isCommingSoon && (
-            <div className={classes.campaignHeader}>
-              <p className={classes.campaignText}>{bannerContent}</p>
-            </div>
-          ))}
+        {(isCampaign || isCommingSoon) && (
+          <div className={classes.campaignHeader}>
+            <p className={classes.campaignText}>{bannerContent}</p>
+          </div>
+        )}
       </div>
     )
   }
