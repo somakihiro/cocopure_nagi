@@ -33,6 +33,9 @@ const About = props => {
           <p>
             お知らせやキャンペーンのご案内もさせていただきますので、ぜひご登録ください。
           </p>
+          <p>
+            ＊LINEご登録で「5年先も老けない美肌を作り出す4ステップ」プレゼント中🎁
+          </p>
           <a href="https://lin.ee/jEsRNiR">
             <img
               height="36"
