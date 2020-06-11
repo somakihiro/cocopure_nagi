@@ -103,6 +103,7 @@ export const Menus = [
     title: "背中美白ケアコース",
     treatmentTime: 80,
     price: "11,000",
+    campaignPrice: "7,700",
     description:
       "普段はフェイシャルにのみする角質ケアを背中にも施す事で、背中ニキビやくすみにアプローチ。ハンドマッサージでたるみなどをすっきりとさせ、LED光照射•水素パックをする事で、美白したハリと透明感のある美しい背中へと導きます。",
     treatmentContent:
