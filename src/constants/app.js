@@ -6,6 +6,7 @@ import whiteningPlusImg from "../images/whitening_plus.jpg"
 import emsImg from "../images/ems.jpg"
 import emsPlusImg from "../images/ems_plus.jpg"
 import bodyImg from "../images/body.jpg"
+import whiteningBackImg from "../images/whitening_back.jpg"
 
 export const Menus = [
   {
@@ -99,6 +100,18 @@ export const Menus = [
   },
   {
     id: 8,
+    title: "背中美白ケアコース",
+    treatmentTime: 80,
+    price: "11,000",
+    description:
+      "普段はフェイシャルにのみする角質ケアを背中にも施す事で、背中ニキビやくすみにアプローチ。ハンドマッサージでたるみなどをすっきりとさせ、LED光照射•水素パックをする事で、美白したハリと透明感のある美しい背中へと導きます。",
+    treatmentContent:
+      "マシンによる角質ケア→酵素パック→背中〜首筋マッサージ→マシンによるLED光照射→水素パック→整肌",
+    imgSrc: whiteningBackImg,
+    category: "body",
+  },
+  {
+    id: 9,
     title: "凪ロイヤルトリートメント フェイシャルパックのお土産付き",
     treatmentTime: 180,
     price: "30,000",
