@@ -105,7 +105,7 @@ class Reservation extends React.Component {
           id: 8,
           title: "美容液導入(背中)",
           treatmentTime: 15,
-          price: "4,500",
+          price: "4,000",
           checked: false,
         },
         {
@@ -127,6 +127,13 @@ class Reservation extends React.Component {
           title: "ラジオ波トリートメント",
           treatmentTime: 20,
           price: "5,500",
+          checked: false,
+        },
+        {
+          id: 12,
+          title: "可視光線照射",
+          treatmentTime: 16,
+          price: "4,000",
           checked: false,
         },
       ],
@@ -532,10 +539,14 @@ class Reservation extends React.Component {
                           <div className={classes.detailMenuBottom}>
                             <p className={classes.formTitle}>メニュー内容</p>
                             <p className={classes.detailMenuDescription}>
-                              {detailMenu.description}
+                              {detailMenu.descriptions.map(d => (
+                                <p>{d}</p>
+                              ))}
                             </p>
                             <p className={classes.detailMenuTreatmentContent}>
-                              {detailMenu.treatmentContent}
+                              {detailMenu.treatmentContents.map(c => (
+                                <p>{c}</p>
+                              ))}
                             </p>
                           </div>
                         </CardContent>

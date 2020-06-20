@@ -80,10 +80,14 @@ class MenuCard extends React.Component {
                 <div className={classes.detailMenuBottom}>
                   <p className={classes.detailMenuBottomTitle}>メニュー内容</p>
                   <p className={classes.detailMenuDescription}>
-                    {detailMenu.description}
+                    {detailMenu.descriptions.map(d => (
+                      <p>{d}</p>
+                    ))}
                   </p>
                   <p className={classes.detailMenuTreatmentContent}>
-                    {detailMenu.treatmentContent}
+                    {detailMenu.treatmentContents.map(c => (
+                      <p>{c}</p>
+                    ))}
                   </p>
                 </div>
               </CardContent>
