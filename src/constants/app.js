@@ -30,7 +30,7 @@ export const Menus = [
     treatmentTime: 100,
     price: "13,500",
     campaignPrice: "9,450",
-    descriptionss: [
+    descriptions: [
       "美白ケア 70分コースに背中〜首筋マッサージをプラスし丹念に凝りをほぐす事で、血行促進、代謝UP、お肌のくすみやムクミをすっきりとさせます。 そして2種の美容機器を使い表皮・皮層にまで美容液を浸透、美白、ハリ、ツヤのあるお肌へと促します。お肌の細胞を元気にし回復力をUP、より透明感・美白効果が期待できます",
     ],
     treatmentContents: [
