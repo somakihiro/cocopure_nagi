@@ -1,10 +1,7 @@
 import specialMenuImg from "../images/special_menu.jpg"
 import standardImg from "../images/standard.jpg"
-import standardPlusImg from "../images/standard_plus.jpg"
 import whiteningImg from "../images/whitening.jpg"
-import whiteningPlusImg from "../images/whitening_plus.jpg"
 import emsImg from "../images/ems.jpg"
-import emsPlusImg from "../images/ems_plus.jpg"
 import bodyImg from "../images/body.jpg"
 import whiteningBackImg from "../images/whitening_back.jpg"
 
@@ -36,7 +33,7 @@ export const Menus = [
     treatmentContents: [
       "背中〜首筋マッサージ→クレンジング→エレクトロクレンジング→クレイパック→デコルテマッサージ→顔マッサージ→ディーポレーション(マシンによる高分子美容有効成分導入)→マシンによる可視光線照射→鎮静パック→頭皮マッサージ or スリーミーによる全身ストレッチ→整肌",
     ],
-    imgSrc: whiteningPlusImg,
+    imgSrc: whiteningImg,
     category: "facial",
   },
   {
@@ -66,7 +63,7 @@ export const Menus = [
     treatmentContents: [
       "背中〜首筋マッサージ→クレンジング→エレクトロクレンジング →2種の美容機器による首筋デコルテ・顔まで引き上げ→クレイパック→デコルテマッサージ→顔マッサージ→鎮静パック→頭皮マッサージ or スリーミーによる全身ストレッチ→整肌",
     ],
-    imgSrc: emsPlusImg,
+    imgSrc: emsImg,
     category: "facial",
   },
   {
@@ -94,7 +91,7 @@ export const Menus = [
     treatmentContents: [
       "クレンジング→エレクトロクレンジング→クレイパック→デコルテマッサージ→顔マッサージ→鎮静パック→頭皮マッサージ or スリーミーによる全身ストレッチ→整肌",
     ],
-    imgSrc: standardPlusImg,
+    imgSrc: standardImg,
     category: "facial",
   },
   {
@@ -115,7 +112,7 @@ export const Menus = [
   {
     id: 8,
     title: "背中美白ケアコース",
-    treatmentTime: 80,
+    treatmentTime: 90,
     price: "11,000",
     campaignPrice: "7,700",
     descriptions: [
