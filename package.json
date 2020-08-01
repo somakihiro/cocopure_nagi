@@ -22,7 +22,7 @@
     "@material-ui/styles": "^4.8.2",
     "date-fns": "^2.9.0",
     "firebase": "^7.6.2",
-    "firebase-tools": "^7.12.1",
+    "firebase-tools": "8.1.0",
     "gatsby": "^2.18.12",
     "gatsby-plugin-material-ui": "^2.1.6",
     "gatsby-plugin-sass": "^2.1.26",
