@@ -144,5 +144,17 @@ export const Menus = [
     ],
     imgSrc: specialMenuImg,
     category: "special",
+  {
+    id: 10,
+    title: "毛穴改善コース",
+    treatmentTime: 90,
+    price: "13,000",
+    descriptions: [
+    ],
+    treatmentContents: [
+      "クレンジング→角質ケア→毛穴エクストラクション→ホワイトピーリングジェル→クレイパック→顔マッサージ→LED光照射→整肌",
+    ],
+    imgSrc: poreImprovementImg,
+    category: "facial",
   },
 ]
