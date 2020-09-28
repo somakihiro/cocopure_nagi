@@ -27,12 +27,14 @@ class News extends React.Component {
       items = items.slice(0, 4)
       const news = items.map(item => {
         const img = item.getElementsByTagName("media:thumbnail")[0]
+        const description = item
+          .getElementsByTagName("description")[0]
+          .textContent.replace(/<[^>]*>?|/gm, "")
+        let content = description.substr(0, 150)
+        if (description.length > 150) content += "..."
         return {
           title: item.getElementsByTagName("title")[0].textContent,
-          content: item
-            .getElementsByTagName("description")[0]
-            .textContent.replace(/<[^>]*>?|/gm, "")
-            .replace("続きをみる", "..."),
+          content,
           link: item.getElementsByTagName("link")[0].textContent,
           pubDate: moment(
             new Date(item.getElementsByTagName("pubDate")[0].textContent)
