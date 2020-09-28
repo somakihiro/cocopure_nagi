@@ -1,4 +1,5 @@
 import React from "react"
+import _ from "lodash"
 import { makeStyles } from "@material-ui/core/styles"
 import Layout from "../components/layout"
 import MenuCard from "../components/menu_card"
@@ -6,23 +7,25 @@ import { Menus } from "../constants/app"
 
 export default () => {
   const styles = useStyles()
+  const orderedMenus = _.sortBy(Menus, "order")
+  const facialMenus = orderedMenus.filter(m => m.category === "facial")
+  const bodyMenus = orderedMenus.filter(m => m.category === "body")
+  const specialMenus = orderedMenus.filter(m => m.category === "special")
+
   return (
     <Layout>
       <div className={styles.menusWrapper}>
         <p style={{ fontSize: 25 }}>MENU</p>
         <p className={styles.category}>フェイシャル</p>
-        {Menus.map(menu => {
-          if (menu.category !== "facial") return
+        {facialMenus.map(menu => {
           return <MenuCard menu={menu} />
         })}
         <p className={styles.category}>ボディ</p>
-        {Menus.map(menu => {
-          if (menu.category !== "body") return
+        {bodyMenus.map(menu => {
           return <MenuCard menu={menu} />
         })}
         <p className={styles.category}>1日1名様限定特別コース</p>
-        {Menus.map(menu => {
-          if (menu.category !== "special") return
+        {specialMenus.map(menu => {
           return <MenuCard menu={menu} />
         })}
       </div>

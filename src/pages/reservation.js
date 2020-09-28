@@ -188,7 +188,7 @@ class Reservation extends React.Component {
         querySnapshot.forEach(doc => {
           const document = doc.data()
           const menu = document && document.menu
-          if (menu && menu.id === 8) {
+          if (menu && menu.id === 9) {
             oneDayLimitedMenuDateTimes.push(document.date.toDate())
           }
         })
@@ -554,7 +554,7 @@ class Reservation extends React.Component {
                     )}
                   </Modal>
                   <p className={classes.formTitle}>メニューの変更</p>
-                  {Menus.map(menu => {
+                  {_.sortBy(Menus, "order").map(menu => {
                     return (
                       <div
                         key={menu.id}

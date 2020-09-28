@@ -4,6 +4,7 @@ import whiteningImg from "../images/whitening.jpg"
 import emsImg from "../images/ems.jpg"
 import bodyImg from "../images/body.jpg"
 import whiteningBackImg from "../images/whitening_back.jpg"
+import poreImprovementImg from "../images/pore_improvement.jpg"
 
 export const Menus = [
   {
@@ -20,6 +21,7 @@ export const Menus = [
     ],
     imgSrc: whiteningImg,
     category: "facial",
+    order: 3,
   },
   {
     id: 2,
@@ -35,6 +37,7 @@ export const Menus = [
     ],
     imgSrc: whiteningImg,
     category: "facial",
+    order: 4,
   },
   {
     id: 3,
@@ -50,6 +53,7 @@ export const Menus = [
     ],
     imgSrc: emsImg,
     category: "facial",
+    order: 1,
   },
   {
     id: 4,
@@ -65,6 +69,7 @@ export const Menus = [
     ],
     imgSrc: emsImg,
     category: "facial",
+    order: 2,
   },
   {
     id: 5,
@@ -79,6 +84,7 @@ export const Menus = [
     ],
     imgSrc: standardImg,
     category: "facial",
+    order: 6,
   },
   {
     id: 6,
@@ -93,6 +99,7 @@ export const Menus = [
     ],
     imgSrc: standardImg,
     category: "facial",
+    order: 7,
   },
   {
     id: 7,
@@ -108,6 +115,7 @@ export const Menus = [
     ],
     imgSrc: bodyImg,
     category: "body",
+    order: 8,
   },
   {
     id: 8,
@@ -130,6 +138,7 @@ export const Menus = [
     ],
     imgSrc: whiteningBackImg,
     category: "body",
+    order: 9,
   },
   {
     id: 9,
@@ -144,17 +153,21 @@ export const Menus = [
     ],
     imgSrc: specialMenuImg,
     category: "special",
+    order: 10,
+  },
   {
     id: 10,
     title: "毛穴改善コース",
     treatmentTime: 90,
     price: "13,000",
     descriptions: [
+      "クレンジング後、角質ケアで古い老化角質を除去していきます。その後、特に毛穴で気になるお鼻まわりを中心に、毛穴に詰まった汚れ（＝角栓）をエクストラクションという手技で取り除いた後、ターンオーバーの促進に効果的なジェルパックを施します。そしてニキビ、肌荒れ、シミ、シワに効果的なクレイパック。フェイシャルマッサージで滞りを流した後、LEDライト照射とパックでお肌を鎮静化します。トーンアップしたつるつるのお肌・すっきりとしたお顔まわりへと導きます。毛穴エクストラクションについてエクストラクションはヨーロッパ、アメリカのエステサロンでは、メジャーに取り入れられている手技による毛穴洗浄になります。日本ではまだ少数のサロンでしか受ける事ができない毛穴を根本からきれいにする為の施術です。3、4週間おきに施術可能で3-10回（個人差があります）の施術で汚れがたまりにくい引き締まった毛穴へと導いていきますので継続しての施術をお薦めします。場合により、痛みを伴う方もいらっしゃいますので（個人差があります）強さ加減を伺いながら施術させていただきます。",
     ],
     treatmentContents: [
       "クレンジング→角質ケア→毛穴エクストラクション→ホワイトピーリングジェル→クレイパック→顔マッサージ→LED光照射→整肌",
     ],
     imgSrc: poreImprovementImg,
     category: "facial",
+    order: 5,
   },
 ]
