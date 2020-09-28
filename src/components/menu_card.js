@@ -90,6 +90,9 @@ class MenuCard extends React.Component {
                     ))}
                   </p>
                 </div>
+                <p style={{ fontSize: 14, marginTop: 20 }}>
+                  ※効果・体感には個人差があります。
+                </p>
               </CardContent>
             </Card>
           )}
