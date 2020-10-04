@@ -7,13 +7,13 @@
 module.exports = {
   plugins: [`gatsby-plugin-sass`],
   plugins: [`gatsby-plugin-material-ui`],
-  plugins: [
-    `gatsby-plugin-react-helmet`,
-    {
-      resolve: "gatsby-plugin-manifest",
-      options: {
-        icon: "static/icons/icon-48x48.png",
-      },
-    },
-  ],
+  // plugins: [
+  //   `gatsby-plugin-react-helmet`,
+  //   {
+  //     resolve: "gatsby-plugin-manifest",
+  //     options: {
+  //       icon: "static/icons/icon-48x48.png",
+  //     },
+  //   },
+  // ],
 }

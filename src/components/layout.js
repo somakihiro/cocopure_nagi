@@ -1,5 +1,5 @@
 import React from "react"
-import Helmet from "react-helmet"
+// import Helmet from "react-helmet"
 import "../styles/layout.css"
 import Header from "./header"
 import Footer from "./footer"
@@ -17,7 +17,7 @@ export default ({ children }) => {
     : ""
   return (
     <div>
-      <Helmet title="COCOPURE 凪" />
+      {/* <Helmet title="COCOPURE 凪" /> */}
       <Header
         isCampaign={isCampaign}
         isCommingSoon={isCommingSoon}

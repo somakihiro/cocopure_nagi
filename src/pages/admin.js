@@ -1,5 +1,5 @@
 import React from "react"
-import Helmet from "react-helmet"
+// import Helmet from "react-helmet"
 import { withStyles } from "@material-ui/core/styles"
 import CircularProgress from "@material-ui/core/CircularProgress"
 import firebase from "../../firebase-config"
@@ -29,7 +29,7 @@ class Admin extends React.Component {
     const { isSignedIn, loading } = this.state
     return (
       <div style={styles.wrapper}>
-        <Helmet title="COCOPURE 凪 - 管理画面" />
+        {/* <Helmet title="COCOPURE 凪 - 管理画面" /> */}
         {loading ? (
           <CircularProgress />
         ) : isSignedIn ? (
