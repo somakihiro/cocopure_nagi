@@ -538,16 +538,18 @@ class Reservation extends React.Component {
                           </div>
                           <div className={classes.detailMenuBottom}>
                             <p className={classes.formTitle}>メニュー内容</p>
-                            <p className={classes.detailMenuDescription}>
-                              {detailMenu.descriptions.map(d => (
-                                <p>{d}</p>
-                              ))}
-                            </p>
-                            <p className={classes.detailMenuTreatmentContent}>
-                              {detailMenu.treatmentContents.map(c => (
-                                <p>{c}</p>
-                              ))}
-                            </p>
+                            <p
+                              className={classes.detailMenuDescription}
+                              dangerouslySetInnerHTML={{
+                                __html: detailMenu.description,
+                              }}
+                            />
+                            <p
+                              className={classes.detailMenuTreatmentContent}
+                              dangerouslySetInnerHTML={{
+                                __html: detailMenu.treatmentContent,
+                              }}
+                            />
                           </div>
                         </CardContent>
                       </Card>
