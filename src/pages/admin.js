@@ -5,6 +5,7 @@ import CircularProgress from "@material-ui/core/CircularProgress"
 import firebase from "../../firebase-config"
 import AdminSignIn from "../components/admin_signIn"
 import AdminReservation from "../components/admin_reservation"
+import AdminMenus from "../features/admin_menus"
 
 class Admin extends React.Component {
   constructor(props) {
@@ -33,7 +34,10 @@ class Admin extends React.Component {
         {loading ? (
           <CircularProgress />
         ) : isSignedIn ? (
-          <AdminReservation />
+          <div>
+            <AdminReservation />
+            <AdminMenus />
+          </div>
         ) : (
           <AdminSignIn />
         )}

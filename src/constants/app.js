@@ -17,7 +17,8 @@ export const Menus = [
       "スタンダード 60分コースにディーポレーション美容液導入をプラスしたコースです。デコルテをしっかりとほぐしながら、クレイパック、顔マッサージで血行促進、代謝UPを促した後、美容液を導入していきます。美容機器を使い表皮・真皮層にまで美容液を浸透させ、お肌の細胞を元気にしムクミ、くすみ改善を促します。",
     treatmentContent:
       "クレンジング→エレクトロクレンジング→クレイパック→デコルテマッサージ→顔マッサージ→ディーポレーション(マシンによる高分子美容有効成分導入)→鎮静パック→頭皮マッサージ or スリーミーによる全身ストレッチ→整肌",
-    imgSrc: whiteningImg,
+    imgSrc:
+      "https://firebasestorage.googleapis.com/v0/b/cocopure-nagi.appspot.com/o/whitening.jpg?alt=media&token=8657a63a-3518-40d8-a6ea-35407c1a6569",
     category: "facial",
     order: 3,
   },
