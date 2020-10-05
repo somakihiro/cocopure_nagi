@@ -36,7 +36,7 @@ class Admin extends React.Component {
         ) : isSignedIn ? (
           <div>
             <AdminReservation />
-            <AdminMenus />
+            {/* <AdminMenus /> */}
           </div>
         ) : (
           <AdminSignIn />
