@@ -8,14 +8,13 @@ import Button from "@material-ui/core/Button"
 import Modal from "@material-ui/core/Modal"
 import CloseIcon from "@material-ui/icons/Close"
 import { withStyles } from "@material-ui/core/styles"
-import { Menus } from "../constants/app"
+import { separate } from "../lib/utils/number_util"
 
 class MenuCard extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       isShowDetailModal: false,
-      detailMenuId: "",
     }
   }
 
@@ -28,9 +27,8 @@ class MenuCard extends React.Component {
   }
 
   render() {
-    const { isShowDetailModal, detailMenuId } = this.state
+    const { isShowDetailModal } = this.state
     const { classes, menu } = this.props
-    const detailMenu = Menus.find(menu => menu.id === detailMenuId)
     const now = new Date()
     const campaignStartTime = new Date(2020, 1, 29)
     const campaignEndTime = new Date(2020, 2, 31, 23, 59, 59)
@@ -41,83 +39,82 @@ class MenuCard extends React.Component {
           open={isShowDetailModal}
           onClose={this.hideMenuDetailModal.bind(this)}
         >
-          {detailMenu && (
-            <Card className={classes.detailModal}>
-              <CardContent className={classes.detailCardContent}>
-                <CloseIcon
-                  className={classes.closeIcon}
-                  onClick={this.hideMenuDetailModal.bind(this)}
+          {/* {detailMenu && ( */}
+          <Card className={classes.detailModal}>
+            <CardContent className={classes.detailCardContent}>
+              <CloseIcon
+                className={classes.closeIcon}
+                onClick={this.hideMenuDetailModal.bind(this)}
+              />
+              <div className={classes.detailMenuTop}>
+                <img src={menu.image_url} className={classes.detailMenuImg} />
+                <div className={classes.detailMenuCardRightContent}>
+                  <p style={{ fontWeight: "bold" }}>{menu.title}</p>
+                  <p>所要時間: {menu.treatment_time}分</p>
+                  {isCampaign && menu.campaign_price ? (
+                    <div>
+                      <span className={classes.beforeCampaignPrice}>
+                        ¥{separate(menu.price)}
+                      </span>
+                      <span className={classes.menuPrice}>
+                        ¥{separate(menu.campaign_price)}
+                      </span>
+                    </div>
+                  ) : (
+                    <div>
+                      <p className={classes.menuPrice}>
+                        ¥{separate(menu.price)}
+                      </p>
+                      {menu.campaign_price && (
+                        <p className={classes.menuPrice}>
+                          初回限定価格: ¥{separate(menu.campaign_price)}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className={classes.detailMenuBottom}>
+                <p className={classes.detailMenuBottomTitle}>メニュー内容</p>
+                <p
+                  className={classes.detailMenuDescription}
+                  dangerouslySetInnerHTML={{ __html: menu.description }}
                 />
-                <div className={classes.detailMenuTop}>
-                  <img
-                    src={detailMenu.imgSrc}
-                    className={classes.detailMenuImg}
-                  />
-                  <div className={classes.detailMenuCardRightContent}>
-                    <p style={{ fontWeight: "bold" }}>{detailMenu.title}</p>
-                    <p>所要時間: {detailMenu.treatmentTime}分</p>
-                    {isCampaign && detailMenu.campaignPrice ? (
-                      <div>
-                        <span className={classes.beforeCampaignPrice}>
-                          ¥{detailMenu.price}
-                        </span>
-                        <span className={classes.menuPrice}>
-                          ¥{detailMenu.campaignPrice}
-                        </span>
-                      </div>
-                    ) : (
-                      <div>
-                        <p className={classes.menuPrice}>¥{detailMenu.price}</p>
-                        {detailMenu.campaignPrice && (
-                          <p className={classes.menuPrice}>
-                            初回限定価格: ¥{detailMenu.campaignPrice}
-                          </p>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className={classes.detailMenuBottom}>
-                  <p className={classes.detailMenuBottomTitle}>メニュー内容</p>
-                  <p
-                    className={classes.detailMenuDescription}
-                    dangerouslySetInnerHTML={{ __html: detailMenu.description }}
-                  />
-                  <p
-                    className={classes.detailMenuTreatmentContent}
-                    dangerouslySetInnerHTML={{
-                      __html: detailMenu.treatmentContent,
-                    }}
-                  />
-                </div>
-                <p style={{ fontSize: 14, marginTop: 20 }}>
-                  ※効果・体感には個人差があります。
-                </p>
-              </CardContent>
-            </Card>
-          )}
+                <p
+                  className={classes.detailMenuTreatmentContent}
+                  dangerouslySetInnerHTML={{
+                    __html: menu.treatment_content,
+                  }}
+                />
+              </div>
+              <p style={{ fontSize: 14, marginTop: 20 }}>
+                ※効果・体感には個人差があります。
+              </p>
+            </CardContent>
+          </Card>
+          {/* )} */}
         </Modal>
         <Card className={classes.card} raised={true}>
-          <CardMedia image={menu.imgSrc} className={classes.menuImg} />
+          <CardMedia image={menu.image_url} className={classes.menuImg} />
           <CardContent className={classes.cardContent}>
             <div className={classes.menuCardRightContent}>
               <p style={{ fontWeight: "bold" }}>{menu.title}</p>
-              <p>所要時間: {menu.treatmentTime}分</p>
-              {isCampaign && menu.campaignPrice ? (
+              <p>所要時間: {menu.treatment_time}分</p>
+              {isCampaign && menu.campaign_price ? (
                 <div>
                   <span className={classes.beforeCampaignPrice}>
-                    ¥{menu.price}
+                    ¥{separate(menu.price)}
                   </span>
                   <span className={classes.menuPrice}>
-                    ¥{menu.campaignPrice}
+                    ¥{separate(menu.campaign_price)}
                   </span>
                 </div>
               ) : (
                 <div>
-                  <p className={classes.menuPrice}>¥{menu.price}</p>
-                  {menu.campaignPrice && (
+                  <p className={classes.menuPrice}>¥{separate(menu.price)}</p>
+                  {menu.campaign_price && (
                     <p className={classes.menuPrice}>
-                      初回限定価格: ¥{menu.campaignPrice}
+                      初回限定価格: ¥{separate(menu.campaign_price)}
                     </p>
                   )}
                 </div>

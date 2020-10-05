@@ -19,12 +19,12 @@ import { withStyles } from "@material-ui/core/styles"
 import moment from "moment"
 import "moment/locale/ja"
 import _ from "lodash"
+import { separate } from "../lib/utils/number_util"
 import Layout from "../components/layout"
 import CompletedReservation from "../components/completed_reservation"
 import { db } from "../../firebase-config"
 import firebase from "../../firebase-config"
 import "firebase/functions"
-import { Menus } from "../constants/app"
 
 class Reservation extends React.Component {
   constructor(props) {
@@ -48,6 +48,7 @@ class Reservation extends React.Component {
       isShowDetailModal: false,
       detailMenuId: "",
       isFirstVisit: "false",
+      menus: [],
     }
 
     this.optionMenus = {
@@ -56,98 +57,99 @@ class Reservation extends React.Component {
           id: 1,
           title: "脚下マッサージ",
           treatmentTime: 10,
-          price: "2,000",
+          price: 2000,
           checked: false,
         },
         {
           id: 2,
           title: "脚全体マッサージ",
           treatmentTime: 20,
-          price: "4,000",
+          price: 4000,
           checked: false,
         },
         {
           id: 3,
           title: "腕マッサージ",
           treatmentTime: 10,
-          price: "1,500",
+          price: 1500,
           checked: false,
         },
         {
           id: 4,
           title: "背中マッサージ",
           treatmentTime: 20,
-          price: "4,000",
+          price: 4000,
           checked: false,
         },
         {
           id: 5,
           title: "デコルテマッサージ",
           treatmentTime: 15,
-          price: "3,500",
+          price: 3500,
           checked: false,
         },
         {
           id: 6,
           title: "ヘッドマッサージ",
           treatmentTime: 10,
-          price: "2,000",
+          price: 2000,
           checked: false,
         },
         {
           id: 7,
           title: "美容液導入(顔)",
           treatmentTime: 10,
-          price: "3,000",
+          price: 3000,
           checked: false,
         },
         {
           id: 8,
           title: "美容液導入(背中)",
           treatmentTime: 15,
-          price: "4,000",
+          price: 4000,
           checked: false,
         },
         {
           id: 9,
           title: "EMSたるみケア",
           treatmentTime: 10,
-          price: "3,000",
+          price: 3000,
           checked: false,
         },
         {
           id: 10,
           title: "ラジオ波トリートメント",
           treatmentTime: 10,
-          price: "3,000",
+          price: 3000,
           checked: false,
         },
         {
           id: 11,
           title: "ラジオ波トリートメント",
           treatmentTime: 20,
-          price: "5,500",
+          price: 5500,
           checked: false,
         },
         {
           id: 12,
           title: "可視光線照射",
           treatmentTime: 16,
-          price: "4,000",
+          price: 4000,
           checked: false,
         },
       ],
       packs: [
-        { id: 1, title: "鎮静パック", price: "0" },
-        { id: 2, title: "炭酸パック", price: "3,000" },
-        { id: 3, title: "水素パック", price: "3,000" },
+        { id: 1, title: "鎮静パック", price: 0 },
+        { id: 2, title: "炭酸パック", price: 3000 },
+        { id: 3, title: "水素パック", price: 3000 },
       ],
     }
   }
 
-  componentDidMount() {
-    this.getReservableDateTimes()
-    this.getOneDayLimitedMenuDateTimes()
+  async componentWillMount() {
+    await this.fetchMenus()
+    await this.getReservableDateTimes()
+    await this.getOneDayLimitedMenuDateTimes()
   }
 
   getReservableDateTimes() {
@@ -196,6 +198,23 @@ class Reservation extends React.Component {
       .then(res => this.setState({ oneDayLimitedMenuDateTimes }))
   }
 
+  async fetchMenus() {
+    const menus = []
+    await db
+      .collection("menus")
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          const document = doc.data()
+          menus.push(document)
+        })
+      })
+      .then(() => {
+        this.setState({ menus: _.sortBy(menus, "order") })
+      })
+      .catch(e => console.log(e))
+  }
+
   setSelectedDateId(event) {
     this.setState({ selectedDateId: event.target.value })
   }
@@ -235,7 +254,7 @@ class Reservation extends React.Component {
       ? this.props.location.state.selectedMenuIdForMenus
       : ""
     const menuId = selectedMenuId || selectedMenuIdForMenus
-    const menu = Menus.find(menu => menu.id === menuId)
+    const menu = this.state.menus.find(menu => menu.id === menuId)
     const optionMenus = this.getSelectedOptionMenus()
 
     const docRef = db.collection("reservations").doc(selectedDateId)
@@ -292,7 +311,7 @@ class Reservation extends React.Component {
   sendMailToClient(name, email, menu, dateId, optionMenus) {
     const date = this.state.reservableDateTimes.find(d => d.id === dateId)
     const isCampaign = this.getIsCampaign()
-    const totalPrice = this.separate(this.getTotalPrice())
+    const totalPrice = separate(this.getTotalPrice())
     try {
       const sendMailToClient = firebase
         .functions()
@@ -366,35 +385,36 @@ class Reservation extends React.Component {
 
   getTotalPrice() {
     const { selectedMenuId, isFirstVisit } = this.state
+
     const selectedMenuIdForMenus = this.props.location.state
       ? this.props.location.state.selectedMenuIdForMenus
       : ""
     const menuId = selectedMenuId || selectedMenuIdForMenus
     if (!menuId) return 0
-    const menu = Menus.find(menu => menu.id === menuId)
+
+    const menu = this.state.menus.find(menu => menu.id === menuId)
+    if (!menu) return 0
+
     const isCampaign = this.getIsCampaign()
+
     const menuPrice =
-      (isCampaign || isFirstVisit === "true") && menu.campaignPrice
-        ? menu.campaignPrice
+      (isCampaign || isFirstVisit === "true") && menu.campaign_price
+        ? menu.campaign_price
         : menu.price
     const optionMenus = this.getSelectedOptionMenus()
+
     const priceArray = optionMenus.massageMenus.map(m => m.price)
     priceArray.push(menuPrice, optionMenus.pack.price)
-    const numberPriceArray = priceArray.map(p => Number(p.split(",").join("")))
-    const totalPrice = numberPriceArray.reduce(
+
+    const totalPrice = priceArray.reduce(
       (accumulator, currentValue) => accumulator + currentValue
     )
     return totalPrice
   }
 
-  // 数値を料金表示するためにカンマで区切る
-  separate(num) {
-    return String(num).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
-  }
-
   getSelectedMenu(id) {
     if (!id) return
-    return Menus.find(menu => menu.id === id)
+    return this.state.menus.find(menu => menu.id === id)
   }
 
   setIsMenuChange(bool) {
@@ -441,6 +461,7 @@ class Reservation extends React.Component {
       isShowDetailModal,
       detailMenuId,
       isFirstVisit,
+      menus,
     } = this.state
 
     let { reservableDateTimes } = this.state
@@ -505,31 +526,32 @@ class Reservation extends React.Component {
                           />
                           <div className={classes.detailMenuTop}>
                             <img
-                              src={detailMenu.imgSrc}
+                              src={detailMenu.image_url}
                               className={classes.menuImg}
                             />
                             <div className={classes.menuCardRightContent}>
                               <p style={{ fontWeight: "bold" }}>
                                 {detailMenu.title}
                               </p>
-                              <p>所要時間: {detailMenu.treatmentTime}分</p>
-                              {isCampaign && detailMenu.campaignPrice ? (
+                              <p>所要時間: {detailMenu.treatment_time}分</p>
+                              {isCampaign && detailMenu.campaign_price ? (
                                 <div>
                                   <span className={classes.beforeCampaignPrice}>
-                                    ¥{detailMenu.price}
+                                    ¥{separate(detailMenu.price)}
                                   </span>
                                   <span className={classes.menuPrice}>
-                                    ¥{detailMenu.campaignPrice}
+                                    ¥{separate(detailMenu.campaign_price)}
                                   </span>
                                 </div>
                               ) : (
                                 <div>
                                   <p className={classes.menuPrice}>
-                                    ¥{detailMenu.price}
+                                    ¥{separate(detailMenu.price)}
                                   </p>
-                                  {detailMenu.campaignPrice && (
+                                  {detailMenu.campaign_price && (
                                     <p className={classes.menuPrice}>
-                                      初回限定価格: ¥{detailMenu.campaignPrice}
+                                      初回限定価格: ¥
+                                      {separate(detailMenu.campaign_price)}
                                     </p>
                                   )}
                                 </div>
@@ -547,7 +569,7 @@ class Reservation extends React.Component {
                             <p
                               className={classes.detailMenuTreatmentContent}
                               dangerouslySetInnerHTML={{
-                                __html: detailMenu.treatmentContent,
+                                __html: detailMenu.treatment_content,
                               }}
                             />
                           </div>
@@ -556,32 +578,34 @@ class Reservation extends React.Component {
                     )}
                   </Modal>
                   <p className={classes.formTitle}>メニューの変更</p>
-                  {_.sortBy(Menus, "order").map(menu => {
+                  {menus.map(menu => {
                     return (
                       <div
                         key={menu.id}
                         onClick={this.changeMenu.bind(this, menu.id)}
                         className={classes.menuCard}
                       >
-                        <img src={menu.imgSrc} className={classes.menuImg} />
+                        <img src={menu.image_url} className={classes.menuImg} />
                         <div className={classes.menuCardRightContent}>
                           <p style={{ fontWeight: "bold" }}>{menu.title}</p>
-                          <p>所要時間: {menu.treatmentTime}分</p>
-                          {isCampaign && menu.campaignPrice ? (
+                          <p>所要時間: {menu.treatment_time}分</p>
+                          {isCampaign && menu.campaign_price ? (
                             <div>
                               <span className={classes.beforeCampaignPrice}>
-                                ¥{menu.price}
+                                ¥{separate(menu.price)}
                               </span>
                               <span className={classes.menuPrice}>
-                                ¥{menu.campaignPrice}
+                                ¥{separate(menu.campaign_price)}
                               </span>
                             </div>
                           ) : (
                             <div>
-                              <p className={classes.menuPrice}>¥{menu.price}</p>
-                              {menu.campaignPrice && (
+                              <p className={classes.menuPrice}>
+                                ¥{separate(menu.price)}
+                              </p>
+                              {menu.campaign_price && (
                                 <p className={classes.menuPrice}>
-                                  初回限定価格: ¥{menu.campaignPrice}
+                                  初回限定価格: ¥{separate(menu.campaign_price)}
                                 </p>
                               )}
                             </div>
@@ -616,24 +640,25 @@ class Reservation extends React.Component {
                           <p style={{ fontWeight: "bold" }}>
                             {selectedMenu.title}
                           </p>
-                          <p>所要時間: {selectedMenu.treatmentTime}分</p>
-                          {isCampaign && selectedMenu.campaignPrice ? (
+                          <p>所要時間: {selectedMenu.treatment_time}分</p>
+                          {isCampaign && selectedMenu.campaign_price ? (
                             <div>
                               <span className={classes.beforeCampaignPrice}>
-                                ¥{selectedMenu.price}
+                                ¥{separate(selectedMenu.price)}
                               </span>
                               <span className={classes.menuPrice}>
-                                ¥{selectedMenu.campaignPrice}
+                                ¥{selectedMenu.campaign_price}
                               </span>
                             </div>
                           ) : (
                             <div>
                               <p className={classes.menuPrice}>
-                                ¥{selectedMenu.price}
+                                ¥{separate(selectedMenu.price)}
                               </p>
-                              {selectedMenu.campaignPrice && (
+                              {selectedMenu.campaign_price && (
                                 <p className={classes.menuPrice}>
-                                  初回限定価格: ¥{selectedMenu.campaignPrice}
+                                  初回限定価格: ¥
+                                  {separate(selectedMenu.campaign_price)}
                                 </p>
                               )}
                             </div>
@@ -726,7 +751,9 @@ class Reservation extends React.Component {
                                 onChange={this.handleChangeCheckbox.bind(this)}
                               />
                             }
-                            label={`${menu.title} ${menu.treatmentTime}分 ¥${menu.price}`}
+                            label={`${menu.title} ${
+                              menu.treatmentTime
+                            }分 ¥${separate(menu.price)}`}
                           />
                         )
                       })}
@@ -744,7 +771,7 @@ class Reservation extends React.Component {
                             <FormControlLabel
                               key={p.id}
                               control={<Radio />}
-                              label={`${p.title} ¥${p.price}`}
+                              label={`${p.title} ¥${separate(p.price)}`}
                               value={p.id}
                             />
                           )
@@ -775,9 +802,7 @@ class Reservation extends React.Component {
                     </FormControl>
                   </div>
                   <p className={classes.totalPriceTitle}>合計金額（税抜き）:</p>
-                  <p className={classes.totalPrice}>
-                    ¥{this.separate(totalPrice)}
-                  </p>
+                  <p className={classes.totalPrice}>¥{separate(totalPrice)}</p>
                   <div className={classes.buttonWrapper}>
                     <Button
                       onClick={this.onReservation.bind(this)}

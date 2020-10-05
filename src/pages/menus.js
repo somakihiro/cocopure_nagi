@@ -1,39 +1,65 @@
 import React from "react"
 import _ from "lodash"
-import { makeStyles } from "@material-ui/core/styles"
+import { withStyles } from "@material-ui/core/styles"
+import { db } from "../../firebase-config"
 import Layout from "../components/layout"
 import MenuCard from "../components/menu_card"
-import { Menus } from "../constants/app"
 
-export default () => {
-  const styles = useStyles()
-  const orderedMenus = _.sortBy(Menus, "order")
-  const facialMenus = orderedMenus.filter(m => m.category === "facial")
-  const bodyMenus = orderedMenus.filter(m => m.category === "body")
-  const specialMenus = orderedMenus.filter(m => m.category === "special")
+class Menus extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { menus: [] }
+  }
 
-  return (
-    <Layout>
-      <div className={styles.menusWrapper}>
-        <p style={{ fontSize: 25 }}>MENU</p>
-        <p className={styles.category}>フェイシャル</p>
-        {facialMenus.map(menu => {
-          return <MenuCard menu={menu} />
-        })}
-        <p className={styles.category}>ボディ</p>
-        {bodyMenus.map(menu => {
-          return <MenuCard menu={menu} />
-        })}
-        <p className={styles.category}>1日1名様限定特別コース</p>
-        {specialMenus.map(menu => {
-          return <MenuCard menu={menu} />
-        })}
-      </div>
-    </Layout>
-  )
+  async componentWillMount() {
+    await this.fetchMenus()
+  }
+
+  async fetchMenus() {
+    const menus = []
+    await db
+      .collection("menus")
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          const document = doc.data()
+          menus.push(document)
+        })
+      })
+      .then(() => {
+        this.setState({ menus: _.sortBy(menus, "order") })
+      })
+      .catch(e => console.log(e))
+  }
+
+  render() {
+    const { menus } = this.state
+    const facialMenus = menus.filter(m => m.category === "facial")
+    const bodyMenus = menus.filter(m => m.category === "body")
+    const specialMenus = menus.filter(m => m.category === "special")
+    return (
+      <Layout>
+        <div style={styles.menusWrapper}>
+          <p style={{ fontSize: 25 }}>MENU</p>
+          <p style={styles.category}>フェイシャル</p>
+          {facialMenus.map(menu => {
+            return <MenuCard menu={menu} />
+          })}
+          <p style={styles.category}>ボディ</p>
+          {bodyMenus.map(menu => {
+            return <MenuCard menu={menu} />
+          })}
+          <p style={styles.category}>1日1名様限定特別コース</p>
+          {specialMenus.map(menu => {
+            return <MenuCard menu={menu} />
+          })}
+        </div>
+      </Layout>
+    )
+  }
 }
 
-const useStyles = makeStyles({
+const styles = {
   menusWrapper: {
     maxWidth: "1000px",
     margin: "0 auto",
@@ -82,4 +108,6 @@ const useStyles = makeStyles({
       opacity: 0.7,
     },
   },
-})
+}
+
+export default withStyles(styles)(Menus)

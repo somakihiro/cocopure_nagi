@@ -280,7 +280,7 @@ class AdminReservation extends React.Component {
                   </ExpansionPanelDetails>
                   <ExpansionPanelDetails>
                     <p>
-                      メニュー:　{r.menu.title} {r.menu.treatmentTime}m
+                      メニュー:　{r.menu.title} {r.menu.treatment_time}m
                     </p>
                   </ExpansionPanelDetails>
                   <ExpansionPanelDetails>
@@ -301,7 +301,7 @@ class AdminReservation extends React.Component {
                       {r.option_menus.pack && r.option_menus.pack.title}
                     </p>
                   </ExpansionPanelDetails>
-                  {r.isCampaign && r.menu.campaignPrice && (
+                  {r.isCampaign && r.menu.campaign_price && (
                     <ExpansionPanelDetails>
                       <p>キャンペーン価格:　○</p>
                     </ExpansionPanelDetails>

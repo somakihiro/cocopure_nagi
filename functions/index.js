@@ -3,6 +3,11 @@ const nodemailer = require("nodemailer")
 const gmailEmail = functions.config().gmail.email
 const gmailPassword = functions.config().gmail.password
 
+// 数値を料金表示するためにカンマで区切る
+const separate = num => {
+  return String(num).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+}
+
 // 送信に使用するメールサーバーの設定
 const mailTransport = nodemailer.createTransport({
   service: "gmail",
@@ -26,7 +31,7 @@ ${data.email}
 ${data.address}
 
 ・メニュー
-${data.menu.title} 施術時間:  ${data.menu.treatmentTime}分
+${data.menu.title} 施術時間:  ${data.menu.treatment_time}分
 
 ・来店日時
 ${data.date}
@@ -75,25 +80,27 @@ ${data.date}
 ・メニュー
 ${data.menu.title}
 メニュー金額:  ${
-    (data.isCampaign || data.isFirstVisit) && data.menu.campaignPrice
-      ? data.menu.campaignPrice
-      : data.menu.price
+    (data.isCampaign || data.isFirstVisit) && data.menu.campaign_price
+      ? separate(data.menu.campaign_price)
+      : separate(data.menu.price)
   }円（税抜き）
-施術時間目安:  ${data.menu.treatmentTime}分
+施術時間目安:  ${data.menu.treatment_time}分
 
 ・オプション
 ${data.optionMenus.massageMenus
   .map(
     m =>
-      `${m.title} 金額:  ${m.price}円（税抜き） 施術時間目安:  ${m.treatmentTime}分`
+      `${m.title} 金額:  ${separate(m.price)}円（税抜き） 施術時間目安:  ${
+        m.treatmentTime
+      }分`
   )
   .join("\n")}
-使用するパック:  ${data.optionMenus.pack.title} 金額: ${
+使用するパック:  ${data.optionMenus.pack.title} 金額: ${separate(
     data.optionMenus.pack.price
-  }円（税抜き）
+  )}円（税抜き）
 
 ・合計金額
-${data.totalPrice}円（税抜き）
+${separate(data.totalPrice)}円（税抜き）
   `
 }
 
