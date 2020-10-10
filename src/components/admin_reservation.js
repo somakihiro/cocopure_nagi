@@ -349,10 +349,10 @@ class AdminReservation extends React.Component {
 
 const styles = {
   wrapper: {
-    padding: "70px 16px 104px",
-    maxWidth: "1000px",
-    maxHeight: "800px",
-    margin: "0 auto",
+    // padding: "70px 16px 104px",
+    // maxWidth: "1000px",
+    // maxHeight: "800px",
+    // margin: "0 auto",
   },
   reservationIndexTitle: {
     marginTop: "40px",

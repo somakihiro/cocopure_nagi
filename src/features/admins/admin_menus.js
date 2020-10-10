@@ -1,7 +1,7 @@
 import React from "react"
 import { withStyles } from "@material-ui/core/styles"
 import Button from "@material-ui/core/Button"
-import { cloudStorage } from "../../firebase-config"
+import { cloudStorage } from "../../../firebase-config"
 
 class AdminMenus extends React.Component {
   constructor(props) {

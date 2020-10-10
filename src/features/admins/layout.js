@@ -1,13 +1,11 @@
 import React from "react"
-// import Helmet from "react-helmet"
+import Header from "./header"
 import { withStyles } from "@material-ui/core/styles"
 import CircularProgress from "@material-ui/core/CircularProgress"
-import firebase from "../../firebase-config"
-import AdminSignIn from "../components/admin_signIn"
-import AdminReservation from "../components/admin_reservation"
-import AdminMenus from "../features/admins/admin_menus"
+import firebase from "../../../firebase-config"
+import AdminSignIn from "../../components/admin_signIn"
 
-class Admin extends React.Component {
+class AdminLayout extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -29,14 +27,13 @@ class Admin extends React.Component {
   render() {
     const { isSignedIn, loading } = this.state
     return (
-      <div style={styles.wrapper}>
-        {/* <Helmet title="COCOPURE 凪 - 管理画面" /> */}
+      <div>
         {loading ? (
           <CircularProgress />
         ) : isSignedIn ? (
           <div>
-            <AdminReservation />
-            {/* <AdminMenus /> */}
+            <Header />
+            <div style={styles.wrapper}>{this.props.children}</div>
           </div>
         ) : (
           <AdminSignIn />
@@ -48,11 +45,10 @@ class Admin extends React.Component {
 
 const styles = {
   wrapper: {
-    padding: "0 16px",
     maxWidth: "1000px",
-    maxHeight: "800px",
     margin: "0 auto",
+    padding: "100px 20px 30px",
   },
 }
 
-export default withStyles(styles)(Admin)
+export default withStyles(styles)(AdminLayout)
