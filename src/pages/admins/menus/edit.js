@@ -82,6 +82,8 @@ class AdminMenuEdit extends React.Component {
   }
 
   async onSave() {
+    if (!this.props.location.state) return
+
     if (this.state.file) {
       await this.uploadImage()
     }
@@ -123,6 +125,8 @@ class AdminMenuEdit extends React.Component {
   }
 
   render() {
+    if (!this.props.location.state) return <div />
+
     const { menu } = this.props.location.state
     const { classes } = this.props
 

@@ -82,6 +82,8 @@ class AdminMenuNew extends React.Component {
   }
 
   async onSave() {
+    if (!this.props.location.state) return
+
     const { menus } = this.props.location.state
 
     if (this.state.file) {
