@@ -120,6 +120,7 @@ const styles = theme => ({
   },
   text: {
     lineHeight: 2,
+    color: "#2b546a",
   },
 })
 

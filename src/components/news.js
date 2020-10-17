@@ -156,6 +156,7 @@ const styles = theme => ({
     marginBottom: "30px",
     borderLeft: "solid 3px #F3ABB3",
     paddingLeft: "16px",
+    color: "#2b546a",
   },
   newsContainer: {
     padding: "25px 0",

@@ -51,13 +51,19 @@ const styles = theme => ({
     },
   },
   title: {
-    fontSize: 25,
+    fontSize: 35,
     marginBottom: "50px",
+    background: "#F3ABB3",
+    color: "#fff",
+    fontFamily: "serif",
+    fontWeight: "bold",
+    padding: "25px",
   },
   description: {
     width: "100%",
     lineHeight: 2,
     fontSize: "15px",
+    color: "#2b546a",
   },
   img: {
     width: "40%",

@@ -836,12 +836,14 @@ const styles = theme => ({
     },
   },
   title: {
-    fontSize: "30px",
-    color: "#F3ABB3",
+    fontSize: 35,
+    background: "#F3ABB3",
+    color: "#fff",
     marginBottom: "55px",
-    textAlign: "center",
+    fontFamily: "serif",
+    fontWeight: "bold",
+    padding: "25px",
     [theme.breakpoints.down("xs")]: {
-      fontSize: "20px",
       marginBottom: "40px",
     },
   },

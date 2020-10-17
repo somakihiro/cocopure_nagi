@@ -40,7 +40,7 @@ class Menus extends React.Component {
     return (
       <Layout>
         <div style={styles.menusWrapper}>
-          <p style={{ fontSize: 25 }}>MENU</p>
+          <p style={styles.title}>MENU</p>
           <p style={styles.category}>フェイシャル</p>
           {facialMenus.map(menu => {
             return <MenuCard menu={menu} />
@@ -65,21 +65,26 @@ const styles = {
     margin: "0 auto",
     padding: "120px 16px 104px",
   },
+  title: {
+    fontSize: 35,
+    marginBottom: "50px",
+    background: "#F3ABB3",
+    color: "#fff",
+    fontFamily: "serif",
+    fontWeight: "bold",
+    padding: "25px",
+  },
   category: {
     borderLeft: "solid 3px #F3ABB3",
     padding: 10,
     marginTop: 40,
     fontSize: 20,
+    color: "#2b546a",
   },
   card: {
     minWidth: 275,
     marginTop: 40,
     padding: "20px 20px 10px",
-  },
-  title: {
-    fontSize: 20,
-    borderRight: "1px solid #dcdcdc",
-    paddingRight: 22,
   },
   treatmentTime: {
     paddingLeft: 20,

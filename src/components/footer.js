@@ -24,5 +24,6 @@ const useStyles = makeStyles({
     margin: "0 auto",
     padding: "10px 16px",
     lineHeight: "25px",
+    color: "#2b546a",
   },
 })
