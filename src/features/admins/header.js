@@ -126,10 +126,7 @@ const styles = theme => ({
   link: {
     textDecoration: "none",
     fontSize: "14px",
-    color: "#534745",
-    [theme.breakpoints.down("xs")]: {
-      color: "#F3ABB3",
-    },
+    color: "#333",
   },
   campaignHeader: {
     background: "#F3ABB3",

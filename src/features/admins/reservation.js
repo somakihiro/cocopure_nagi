@@ -14,8 +14,8 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers"
 import Button from "@material-ui/core/Button"
-import { db } from "../../firebase-config"
-import Dialog from "./dialog"
+import { db } from "../../../firebase-config"
+import Dialog from "../../components/dialog"
 
 class AdminReservation extends React.Component {
   constructor(props) {

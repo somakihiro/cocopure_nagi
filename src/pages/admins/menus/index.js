@@ -1,11 +1,12 @@
 import React from "react"
+import { Link } from "gatsby"
 import _ from "lodash"
 import Button from "@material-ui/core/Button"
 import Snackbar from "@material-ui/core/Snackbar"
 import Alert from "@material-ui/lab/Alert"
-import { db } from "../../../firebase-config"
-import AdminLayout from "../../features/admins/layout"
-import AdminMenuList from "../../features/admins/menus/menu_list"
+import { db } from "../../../../firebase-config"
+import AdminLayout from "../../../features/admins/layout"
+import AdminMenuList from "../../../features/admins/menus/menu_list"
 import arrayMove from "array-move"
 
 class AdminMenus extends React.Component {
@@ -72,6 +73,13 @@ class AdminMenus extends React.Component {
           <Alert color="success">メニューの並び順を保存しました</Alert>
         </Snackbar>
         <p style={{ fontSize: 20, marginBottom: 20 }}>メニュー一覧</p>
+        <Link
+          style={{ display: "inline-block", marginBottom: 20 }}
+          to="/admins/menus/new"
+          state={{ menus: menus }}
+        >
+          メニューを追加する
+        </Link>
         <AdminMenuList menus={menus} onSortEnd={this.onSortEnd.bind(this)} />
         <Button
           variant="contained"

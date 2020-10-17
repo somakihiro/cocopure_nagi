@@ -3,7 +3,7 @@ import Header from "./header"
 import { withStyles } from "@material-ui/core/styles"
 import CircularProgress from "@material-ui/core/CircularProgress"
 import firebase from "../../../firebase-config"
-import AdminSignIn from "../../components/admin_signIn"
+import AdminSignIn from "./signin"
 
 class AdminLayout extends React.Component {
   constructor(props) {
