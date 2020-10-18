@@ -34,7 +34,7 @@ class AdminMenuItem extends React.Component {
   render() {
     const { menu } = this.props
     return (
-      <div>
+      <div style={{ marginBottom: 30 }}>
         <Dialog
           open={this.state.isDeleteDialogOpen}
           handleClose={this.closeDialog.bind(this)}

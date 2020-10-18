@@ -34,8 +34,13 @@ const About = props => {
           </div>
           <div className={classes.block}>
             <div className={classes.subH}>アクセス</div>
-            <div className={classes.text}>
-              JR蒲田駅より徒歩12分、京浜急行線京急蒲田駅より徒歩15分{" "}
+            <div className={classes.accessText}>
+              <p style={{ marginBottom: 15 }}>・電車</p>
+              <p>JR蒲田駅より徒歩12分、京浜急行線京急蒲田駅より徒歩15分</p>
+            </div>
+            <div className={classes.accessText}>
+              <p style={{ marginBottom: 15 }}>・バス</p>
+              <p>蒲田本町より徒歩3分</p>
             </div>
           </div>
         </div>
@@ -86,7 +91,7 @@ const styles = theme => ({
     padding: "25px",
   },
   contentWrapper: {
-    marginBottom: "65px",
+    marginBottom: "40px",
   },
   block: { marginBottom: "40px" },
   subH: {
@@ -115,6 +120,11 @@ const styles = theme => ({
   dd: {
     width: "70%",
     marginBottom: "30px",
+  },
+  accessText: {
+    fontSize: 16,
+    color: "#8491a5",
+    marginBottom: 20,
   },
   snsWrapper: {
     lineHeight: "30px",
