@@ -15,14 +15,14 @@ class News extends React.Component {
   }
 
   componentDidMount() {
-    const CORS_PROXY = "https://cors-anywhere.herokuapp.com/"
+    const CORS_PROXY = "https://secret-ocean-49799.herokuapp.com/"
     let xhr = new XMLHttpRequest()
     xhr.open("GET", CORS_PROXY + "https://note.com/cocopure_nagi/rss")
     xhr.responseType = "document"
     xhr.send()
     xhr.onload = () => {
       const rss_data = xhr.response
-      let items = rss_data.getElementsByTagName(`item`)
+      let items = rss_data.getElementsByTagName("item")
       items = Array.prototype.slice.call(items)
       items = items.slice(0, 4)
       const news = items.map(item => {
