@@ -15,7 +15,7 @@ class News extends React.Component {
   }
 
   componentDidMount() {
-    const CORS_PROXY = "https://secret-ocean-49799.herokuapp.com/"
+    const CORS_PROXY = "https://floating-springs-23825.herokuapp.com/"
     let xhr = new XMLHttpRequest()
     xhr.open("GET", CORS_PROXY + "https://note.com/cocopure_nagi/rss")
     xhr.responseType = "document"
